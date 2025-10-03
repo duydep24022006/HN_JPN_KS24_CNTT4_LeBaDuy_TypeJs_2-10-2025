@@ -15,11 +15,11 @@ export default function Navbar() {
   }, []);
 
   return (
-    <div className="w-full h-12 bg-white border-b border-gray-300">
-      <div className="flex items-center justify-between px-4 ">
+    <div className="w-full h-12 bg-white border-b border-gray-300 !shadow-[0_8px_16px_0_rgba(0,0,0,0.15)]">
+      <div className="flex items-center justify-between pr-4  ">
         <div
-          className={`flex items-center gap-4 border-r border-gray-300 h-12  ${
-            isMobileView ? "min-w-28" : "min-w-54"
+          className={`flex items-center gap-4 border-r pl-4  h-12 border-b border-gray-300 ${
+            isMobileView ? "min-w-28" : "min-w-60"
           }`}
         >
           <div className="flex items-center gap-2 pr-4 ">

@@ -47,88 +47,100 @@ export default function TrelloWorkspace() {
   return (
     <div className=" min-h-[calc(100vh-64px)] bg-white">
       <div className="h-[calc(100vh-240px)] p-6">
-        <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
+        <div className="flex items-center justify-between mb-6 pb-1 border-b border-gray-200">
           <div className="flex items-center gap-3">
-            <Menu size={18} className="text-gray-600" />
-            <h1 className="text-lg font-normal text-gray-900">
+            <Menu size={32} className="text-gray-600" />
+            <h2 className="text-lg font-normal text-gray-900">
               Your Workspaces
-            </h1>
+            </h2>
           </div>
           <div className="flex items-center gap-2">
-            <div className="flex items-center">
-              <button className="px-3 py-1 border border-gray-300 rounded-l text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-1.5 border-r-0">
+            <div className="flex items-center border-0 ">
+              <button className="px-3 py-1 border border-gray-300 !rounded-[4px] !rounded-r-[0px] text-xs text-gray-700 hover:!bg-gray-100 flex items-center gap-1.5">
                 <Share2 size={12} />
                 Share
               </button>
-              <button className="px-3 py-1 border border-gray-300 rounded-r text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-1.5">
+              <button className="px-3 py-1 border border-gray-300 !rounded-[4px] !rounded-l-[0px]  text-xs text-gray-700 hover:!bg-gray-100 flex items-center gap-1.5">
                 <Download size={12} />
                 Export
               </button>
             </div>
-            <button className="px-3 py-1 border border-gray-300 rounded text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-1.5">
+
+            <button className="px-3 py-1 border border-gray-300 rounded text-xs text-gray-700 hover:!bg-gray-100 flex items-center gap-1.5">
               <Calendar size={12} />
               this week
             </button>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-3 mb-6">
+        <div className="flex flex-wrap gap-4 mb-6">
           {boards.map((board) => (
             <div
               key={board.id}
-              className="relative rounded-lg overflow-hidden  group cursor-pointer  w-[270px] h-[170px]"
+              className="relative rounded-[5px] overflow-hidden group cursor-pointer w-[270px] h-[130px]"
             >
               <img
                 src={board.image}
                 alt={board.title}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-opacity-20 group-hover:bg-opacity-30 transition-all"></div>
-              <div className="absolute top-2.5 left-3 ">
-                <h4 className="text-white font-semibold text-sm">
+
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all z-0"></div>
+
+              <div className="absolute top-2.5 left-3 z-10">
+                <p className="text-white font-medium text-[18.5px]">
                   {board.title}
-                </h4>
+                </p>
               </div>
-              <div className="absolute bottom-2.5 left-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button className="flex items-center gap-1 text-white text-xs bg-black bg-opacity-25 px-2 py-1 rounded">
-                  <Edit2 size={11} />
+
+              <div className="absolute bottom-2.5 left-3 opacity-0 group-hover:!opacity-100 transition-opacity z-10">
+                <button className="flex items-center gap-1 text-white text-xs bg-black/50 px-2 py-1 rounded">
+                  <Edit2 size={12} />
                   Edit this board
                 </button>
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="mb-10 ">
-          <button className="px-4 py-2 bg-gray-50 border border-gray-300 text-gray-700 rounded text-sm hover:bg-gray-100 transition-colors">
-            Create new board
-          </button>
+          <div className="mb-10 w-[270px] h-[130px] bg-gray-200 rounded-[5px] flex justify-center items-center ">
+            <button className="px-4 py-2 bg-gray-50 border border-gray-300 text-gray-700 rounded text-sm hover:!bg-gray-100 transition-colors">
+              Create new board
+            </button>
+          </div>
         </div>
 
         <div>
           <div className="flex items-center gap-2 mb-4 pb-4 border-b border-gray-200">
-            <Star size={18} className="text-gray-700" />
+            <Star size={32} className="text-gray-700" />
             <h2 className="text-lg font-normal text-gray-900">
               Starred Boards
             </h2>
           </div>
 
-          <div className="grid grid-cols-4 gap-3">
+          <div className="flex flex-wrap gap-4 mb-6">
             {starredBoards.map((board) => (
               <div
                 key={board.id}
-                className="relative rounded-lg overflow-hidden group cursor-pointer  w-[270px] h-[170px]"
+                className="relative rounded-[5px] overflow-hidden group cursor-pointer w-[270px] h-[130px]"
               >
                 <img
                   src={board.image}
                   alt={board.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-30 transition-all"></div>
-                <div className="absolute top-2.5 left-3">
-                  <h3 className="text-white font-semibold text-sm">
+
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all z-0"></div>
+
+                <div className="absolute top-2.5 left-3 z-10">
+                  <p className="text-white font-medium text-[18.5px]">
                     {board.title}
-                  </h3>
+                  </p>
+                </div>
+
+                <div className="absolute bottom-2.5 left-3 opacity-0 group-hover:!opacity-100 transition-opacity z-10">
+                  <button className="flex items-center gap-1 text-white text-xs bg-black/50 px-2 py-1 rounded">
+                    <Edit2 size={11} />
+                    Edit this board
+                  </button>
                 </div>
               </div>
             ))}
