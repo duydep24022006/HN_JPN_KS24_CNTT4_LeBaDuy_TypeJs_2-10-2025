@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { Star, Menu, Share2, Download, Calendar, Edit2 } from "lucide-react";
+import { Star, Menu, Calendar, Edit2 } from "lucide-react";
 
-export default function TrelloWorkspace() {
+type Props = {
+  onChangeToggle?: (key: boolean) => void;
+};
+export default function EventBoard({ onChangeToggle }: Props) {
   const [boards] = useState([
     {
       id: 1,
@@ -57,11 +60,9 @@ export default function TrelloWorkspace() {
           <div className="flex items-center gap-2">
             <div className="flex items-center border-0 ">
               <button className="px-3 py-1 border border-gray-300 !rounded-[4px] !rounded-r-[0px] text-xs text-gray-700 hover:!bg-gray-100 flex items-center gap-1.5">
-                <Share2 size={12} />
                 Share
               </button>
               <button className="px-3 py-1 border border-gray-300 !rounded-[4px] !rounded-l-[0px]  text-xs text-gray-700 hover:!bg-gray-100 flex items-center gap-1.5">
-                <Download size={12} />
                 Export
               </button>
             </div>
@@ -87,13 +88,16 @@ export default function TrelloWorkspace() {
 
               <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all z-0"></div>
 
-              <div className="absolute top-2.5 left-3 z-10">
+              <div className="absolute top-2.5 left-3 z-2">
                 <p className="text-white font-medium text-[18.5px]">
                   {board.title}
                 </p>
               </div>
 
-              <div className="absolute bottom-2.5 left-3 opacity-0 group-hover:!opacity-100 transition-opacity z-10">
+              <div
+                className="absolute bottom-2.5 left-3 opacity-0 group-hover:!opacity-100 transition-opacity z-2"
+                onClick={() => onChangeToggle?.(true)}
+              >
                 <button className="flex items-center gap-1 text-white text-xs bg-black/50 px-2 py-1 rounded">
                   <Edit2 size={12} />
                   Edit this board
@@ -101,7 +105,10 @@ export default function TrelloWorkspace() {
               </div>
             </div>
           ))}
-          <div className="mb-10 w-[270px] h-[130px] bg-gray-200 rounded-[5px] flex justify-center items-center ">
+          <div
+            className="mb-10 w-[270px] h-[130px] bg-gray-200 rounded-[5px] flex justify-center items-center "
+            onClick={() => onChangeToggle?.(true)}
+          >
             <button className="px-4 py-2 bg-gray-50 border border-gray-300 text-gray-700 rounded text-sm hover:!bg-gray-100 transition-colors">
               Create new board
             </button>
@@ -130,13 +137,13 @@ export default function TrelloWorkspace() {
 
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all z-0"></div>
 
-                <div className="absolute top-2.5 left-3 z-10">
+                <div className="absolute top-2.5 left-3 z-2">
                   <p className="text-white font-medium text-[18.5px]">
                     {board.title}
                   </p>
                 </div>
 
-                <div className="absolute bottom-2.5 left-3 opacity-0 group-hover:!opacity-100 transition-opacity z-10">
+                <div className="absolute bottom-2.5 left-3 opacity-0 group-hover:!opacity-100 transition-opacity z-2 ">
                   <button className="flex items-center gap-1 text-white text-xs bg-black/50 px-2 py-1 rounded">
                     <Edit2 size={11} />
                     Edit this board

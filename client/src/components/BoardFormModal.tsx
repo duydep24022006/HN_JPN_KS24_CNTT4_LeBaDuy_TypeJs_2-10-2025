@@ -39,8 +39,8 @@ export default function CreateBoardModal({ onChangeToggle, isModal }: Props) {
   };
   if (!isModal) return null;
   return (
-    <div className="min-h-screen bg-gray-500 bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg w-full max-w-[498px]">
+    <div className="h-[calc(100vh-48px)] bg-gray-500/50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-lg w-full max-w-[498px] ">
         <div className="flex items-center justify-between w-[498px] h-[63px] px-4 border-b-1 border-gray-300">
           <h4 className="text-base font-medium text-gray-900">Create board</h4>
           <button

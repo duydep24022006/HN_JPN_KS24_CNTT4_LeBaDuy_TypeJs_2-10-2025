@@ -4,18 +4,24 @@ import SignUp from "../pages/auth/SignUp";
 import Dashboard from "../pages/Dashboard";
 import ProtectedRoute from "../components/ProtectedRoute";
 import EventBoard from "../pages/EventBoard";
+import TaskListBoard from "../pages/TaskListBoard";
 
 export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Login />,
+  },
   {
     path: "/login",
     element: <Login />,
   },
+
   {
     path: "/register",
     element: <SignUp />,
   },
   {
-    path: "/",
+    path: "/dashboard/:id",
     element: (
       <ProtectedRoute>
         <Dashboard />
@@ -23,8 +29,12 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "/eventBoard",
+        index: true,
         element: <EventBoard />,
+      },
+      {
+        path: "taskList",
+        element: <TaskListBoard />,
       },
     ],
   },

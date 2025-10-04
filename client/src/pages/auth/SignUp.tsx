@@ -2,6 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import "@fontsource/roboto/700.css";
 import AuthTrello from "/src/assets/AuthTrello.png";
+import { NavLink } from "react-router-dom";
 export default function SignUp() {
   return (
     <div className="h-screen w-screen bg-[#ffffff] flex justify-center items-center">
@@ -28,9 +29,9 @@ export default function SignUp() {
           />
           <p>
             Already have an account,
-            <a href="" className="ml-1.5 ">
+            <NavLink to={"/login"} className="ml-1.5  cursor-pointer">
               click here !
-            </a>
+            </NavLink>
           </p>
           <Button variant="primary" className="w-[298px]">
             Sign up
