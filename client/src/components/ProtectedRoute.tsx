@@ -6,7 +6,7 @@ interface Props {
 }
 
 const ProtectedRoute: React.FC<Props> = ({ children }) => {
-  const isAuthenticated = true;
+  const isAuthenticated = !!localStorage.getItem("currentUser");
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;

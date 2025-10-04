@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Star,
   MoreHorizontal,
@@ -131,7 +131,7 @@ export default function TaskListBoard() {
                 <>
                   <h6
                     className="font-semibold text-[#172B4D] text-sm cursor-pointer hover:bg-gray-200 px-1 py-0.5 rounded"
-                    onClick={() => setEditingListId(list.id)}
+                    // onClick={() => setEditingListId(list.id)}
                   >
                     {list.title}
                   </h6>
@@ -213,7 +213,7 @@ export default function TaskListBoard() {
               ) : (
                 <>
                   <button
-                    onClick={() => setAddingCardToList(list.id)}
+                    // onClick={() => setAddingCardToList(list.id)}
                     className="w-full text-left px-2 py-1.5 text-gray-700 hover:bg-gray-200 rounded text-sm flex items-center gap-1.5"
                   >
                     <Plus size={14} />

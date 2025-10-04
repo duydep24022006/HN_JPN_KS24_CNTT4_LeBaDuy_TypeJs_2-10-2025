@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Search, Menu } from "lucide-react";
 import HomeTrello from "../assets/HomeTrello.png";
-export default function Navbar() {
+
+type Props = {
+  onChangeSiderbar: (key: boolean) => void;
+};
+export default function Navbar({ onChangeSiderbar }: Props) {
   const [isMobileView, setIsMobileView] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const checkWidth = () => {
       setIsMobileView(window.innerWidth <= 576);
     };
-
     checkWidth();
     window.addEventListener("resize", checkWidth);
     return () => window.removeEventListener("resize", checkWidth);
@@ -33,7 +36,10 @@ export default function Navbar() {
               <button className="p-1.5 hover:bg-gray-100 rounded">
                 <Search className="w-5 h-5 text-gray-600" />
               </button>
-              <button className="p-1.5 hover:bg-gray-100 rounded">
+              <button
+                className="p-1.5 hover:bg-gray-100 rounded"
+                onClick={() => onChangeSiderbar(true)}
+              >
                 <Menu className="w-5 h-5 text-gray-600" />
               </button>
             </>

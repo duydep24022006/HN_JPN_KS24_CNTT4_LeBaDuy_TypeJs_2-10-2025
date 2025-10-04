@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import "@fontsource/roboto/700.css";
 import AuthTrello from "/src/assets/AuthTrello.png";
@@ -36,7 +36,7 @@ export default function Login() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    let newErrors = { email: "", password: "" };
+    const newErrors = { email: "", password: "" };
     let hasError = false;
 
     if (!formData.email.trim()) {

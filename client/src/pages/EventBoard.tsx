@@ -1,10 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Star, Menu, Calendar, Edit2 } from "lucide-react";
 
 type Props = {
   onChangeToggle?: (key: boolean) => void;
 };
 export default function EventBoard({ onChangeToggle }: Props) {
+  const [isMobileView, setIsMobileView] = useState(false);
+
+  useEffect(() => {
+    const checkWidth = () => {
+      setIsMobileView(window.innerWidth <= 577);
+    };
+    checkWidth();
+    window.addEventListener("resize", checkWidth);
+    return () => window.removeEventListener("resize", checkWidth);
+  }, []);
+  console.log(isMobileView);
+
   const [boards] = useState([
     {
       id: 1,
@@ -48,7 +60,7 @@ export default function EventBoard({ onChangeToggle }: Props) {
   ]);
 
   return (
-    <div className=" min-h-[calc(100vh-64px)] bg-white">
+    <div className=" min-h-[calc(100vh-64px)] bg-white ">
       <div className="h-[calc(100vh-240px)] p-6">
         <div className="flex items-center justify-between mb-6 pb-1 border-b border-gray-200">
           <div className="flex items-center gap-3">
@@ -74,11 +86,13 @@ export default function EventBoard({ onChangeToggle }: Props) {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-4 mb-6">
+        <div className="flex flex-wrap gap-4 ">
           {boards.map((board) => (
             <div
               key={board.id}
-              className="relative rounded-[5px] overflow-hidden group cursor-pointer w-[270px] h-[130px]"
+              className={`relative rounded-[5px] overflow-hidden group cursor-pointer ${
+                isMobileView ? " w-[240px]" : "w-[270px]"
+              } h-[130px]`}
             >
               <img
                 src={board.image}
@@ -106,7 +120,9 @@ export default function EventBoard({ onChangeToggle }: Props) {
             </div>
           ))}
           <div
-            className="mb-10 w-[270px] h-[130px] bg-gray-200 rounded-[5px] flex justify-center items-center "
+            className={`mb-10 ${
+              isMobileView ? " w-[240px]" : "w-[270px]"
+            } h-[130px] bg-gray-200 rounded-[5px] flex justify-center items-center `}
             onClick={() => onChangeToggle?.(true)}
           >
             <button className="px-4 py-2 bg-gray-50 border border-gray-300 text-gray-700 rounded text-sm hover:!bg-gray-100 transition-colors">
@@ -123,11 +139,13 @@ export default function EventBoard({ onChangeToggle }: Props) {
             </h2>
           </div>
 
-          <div className="flex flex-wrap gap-4 mb-6">
+          <div className="flex flex-wrap gap-4 mb-6 pb-15">
             {starredBoards.map((board) => (
               <div
                 key={board.id}
-                className="relative rounded-[5px] overflow-hidden group cursor-pointer w-[270px] h-[130px]"
+                className={`relative rounded-[5px] overflow-hidden group cursor-pointer ${
+                  isMobileView ? " w-[240px]" : "w-[270px]"
+                } h-[130px]`}
               >
                 <img
                   src={board.image}
