@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Star,
   MoreHorizontal,
   Plus,
-  Table2,
   CircleX,
   ListFilter,
   X,
+  TableProperties,
 } from "lucide-react";
 import Board from "../assets/Board.svg";
 import Delete from "../assets/Frame (6).svg";
@@ -15,6 +15,11 @@ import Button from "react-bootstrap/esm/Button";
 import { confirmNotification } from "../utils/ConfirmNotification";
 import Swal from "sweetalert2";
 import FilterDropdown from "../components/FilterDropdown";
+import { DatePickerModal } from "../components/DatePickerModal";
+import FormTask from "../components/FormTask";
+import MoveCard from "../components/MoveCard";
+import Labels from "../components/Labels";
+import LabelModal from "../components/labelModal";
 
 export default function TaskListBoard() {
   const [lists, setLists] = useState([
@@ -36,7 +41,10 @@ export default function TaskListBoard() {
       cards: [{ id: 1, title: "Thuê DJ", completed: true }],
     },
   ]);
-
+  const [isShowFormTask, setIsShowFormTask] = useState(false);
+  const [isLabelModal, setIsLabelModal] = useState(false);
+  const [isLabels, setIsLabels] = useState(Boolean);
+  const [isMoveCard, setIsMoveCard] = useState(false);
   const [addingCardToList, setAddingCardToList] = useState(null);
   const [newCardTitle, setNewCardTitle] = useState("");
   const [addingNewList, setAddingNewList] = useState(false);
@@ -44,6 +52,7 @@ export default function TaskListBoard() {
   const [editingListId, setEditingListId] = useState(null);
   //   const [editListTitle, setEditListTitle] = useState("");
   const [isFilter, setIsFilter] = useState(false);
+  const [showDate, setShowDate] = useState<boolean>(false);
   const confirm = async (key: string) => {
     const result = await confirmNotification(key);
     if (result) {
@@ -57,6 +66,10 @@ export default function TaskListBoard() {
 
   const onChangeFilter = (key: boolean) => {
     setIsFilter(key);
+  };
+  const onChangeFormTask = (key: boolean) => {
+    console.log(1111);
+    setIsShowFormTask(key);
   };
   return (
     <div className="h-screen !w-[100%] flex flex-col bg-white overflow-hidden">
@@ -83,7 +96,10 @@ export default function TaskListBoard() {
             </Button>
 
             <button className="px-2.5 py-1  hover:bg-gray-100 text-[#172B4D] rounded text-xs flex items-center gap-1.5 font-medium">
-              <Table2 size={16} />
+              <TableProperties
+                size={16}
+                style={{ transform: "rotate(180deg)" }}
+              />
               Table
             </button>
 
@@ -107,7 +123,6 @@ export default function TaskListBoard() {
           </button>
         </div>
       </div>
-
       {/* Lists */}
       <div className="flex-1 overflow-auto mt-20 p-4 flex gap-2 items-start">
         {lists.map((list) => (
@@ -131,7 +146,7 @@ export default function TaskListBoard() {
                 <>
                   <h6
                     className="font-semibold text-[#172B4D] text-sm cursor-pointer hover:bg-gray-200 px-1 py-0.5 rounded"
-                    // onClick={() => setEditingListId(list.id)}
+                    onClick={() => setEditingListId(list.id)}
                   >
                     {list.title}
                   </h6>
@@ -149,31 +164,37 @@ export default function TaskListBoard() {
                   <div
                     key={card.id}
                     className="bg-white rounded shadow-sm p-2 mb-2 hover:bg-gray-50 cursor-pointer"
+                    onClick={() => setIsShowFormTask(true)}
                   >
                     <div className="flex items-start gap-2">
-                      <div
-                        className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                          card.completed
-                            ? "bg-green-500"
-                            : "bg-white border-2 border-gray-400"
-                        }`}
-                      >
-                        {card.completed && (
-                          <svg
-                            className="w-2.5 h-2.5 text-white"
-                            fill="none"
-                            strokeWidth="3"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                        )}
-                      </div>
+                      {card.completed ? (
+                        <div
+                          className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                            card.completed
+                              ? "bg-green-500"
+                              : "bg-white border-2 border-gray-400"
+                          }`}
+                        >
+                          {card.completed && (
+                            <svg
+                              className="w-2.5 h-2.5 text-white"
+                              fill="none"
+                              strokeWidth="3"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          )}
+                        </div>
+                      ) : (
+                        <></>
+                      )}
+
                       <span className="text-sm text-gray-800">
                         {card.title}
                       </span>
@@ -213,7 +234,7 @@ export default function TaskListBoard() {
               ) : (
                 <>
                   <button
-                    // onClick={() => setAddingCardToList(list.id)}
+                    onClick={() => setAddingCardToList(list.id)}
                     className="w-full text-left px-2 py-1.5 text-gray-700 hover:bg-gray-200 rounded text-sm flex items-center gap-1.5"
                   >
                     <Plus size={14} />
@@ -278,6 +299,24 @@ export default function TaskListBoard() {
       <FilterDropdown
         onClose={() => onChangeFilter(false)}
         isFilter={isFilter}
+      />
+      <DatePickerModal isOpen={showDate} onClose={() => setShowDate(false)} />
+      <FormTask
+        isShowFormTask={isShowFormTask}
+        onClose={() => onChangeFormTask(false)}
+        onShowDate={() => setShowDate(true)}
+        onShowMoveCard={() => setIsMoveCard(true)}
+        onShowLabel={() => setIsLabels(true)}
+      />
+      <MoveCard isMoveCard={isMoveCard} onClose={() => setIsMoveCard(false)} />
+      <Labels
+        isOpen={isLabels}
+        onClose={() => setIsLabels(false)}
+        onShowLabelModal={() => setIsLabelModal(true)}
+      />
+      <LabelModal
+        isOpen={isLabelModal}
+        onClose={() => setIsLabelModal(false)}
       />
     </div>
   );

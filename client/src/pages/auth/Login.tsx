@@ -3,18 +3,14 @@ import Button from "react-bootstrap/Button";
 import "@fontsource/roboto/700.css";
 import AuthTrello from "/src/assets/AuthTrello.png";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../store/store";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "../../store/store";
 import { getUser } from "../../services/authApi";
 import { showError, showSuccess } from "../../utils/Mess";
 
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { currentUser, error } = useSelector(
-    (state: RootState) => state.authSlice
-  );
-  console.log(currentUser, error);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -57,9 +53,9 @@ export default function Login() {
 
     dispatch(getUser({ email: formData.email, password: formData.password }))
       .unwrap()
-      .then((user) => {
-        showSuccess();
-        navigate(`/dashboard/${user.id}`);
+      .then(() => {
+        showSuccess("Đăng nhập thành công");
+        navigate(`/dashboard`);
       })
       .catch(() => {
         showError(["Email không đúng", "Hoặc mật khẩu không đúng"]);

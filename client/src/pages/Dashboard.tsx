@@ -3,15 +3,13 @@ import Navbar from "../layouts/Navbar";
 import Sidebar from "../layouts/Sidebar";
 import BoardFormModal from "../components/BoardFormModal";
 import { Outlet } from "react-router-dom";
+import type { Board } from "../utils/types";
 
 export default function Dashboard() {
   const [isModal, setIsModal] = useState(false);
   const [isSiderbar, setIsSiderbar] = useState(false);
-  const onChangeToggle = (key: boolean) => {
-    setIsModal(key);
-  };
   const [isMobileView, setIsMobileView] = useState(false);
-
+  const [selectedBoard, setSelectedBoard] = useState<Board | null>(null);
   useEffect(() => {
     const checkWidth = () => {
       setIsMobileView(window.innerWidth <= 576);
@@ -23,6 +21,14 @@ export default function Dashboard() {
   }, []);
   const onChangeSiderbar = (key: boolean) => {
     setIsSiderbar(key);
+    console.log(key);
+  };
+  const onChangeToggle = (board: Board | null) => {
+    setSelectedBoard(board);
+    setIsModal(true);
+  };
+  const offChangeToggle = (key: boolean) => {
+    setIsModal(key);
   };
   return (
     <div className="dashboard-container relative ">
@@ -30,7 +36,7 @@ export default function Dashboard() {
         <Navbar onChangeSiderbar={onChangeSiderbar} />
       </header>
       <main className="flex">
-        <div className="fixed mt-12 z-40">
+        <div className={`fixed mt-12 ${isMobileView ? "z-40" : "z-20"} `}>
           <Sidebar
             onChangeSiderbar={onChangeSiderbar}
             isSiderbar={isSiderbar}
@@ -40,7 +46,11 @@ export default function Dashboard() {
           className={`${isMobileView ? "" : "ml-60"} w-screen relative mt-12`}
         >
           <div className="absolute z-3 w-full">
-            <BoardFormModal isModal={isModal} onChangeToggle={onChangeToggle} />
+            <BoardFormModal
+              isModal={isModal}
+              offChangeToggle={offChangeToggle}
+              selectedBoard={selectedBoard}
+            />
           </div>
           <div className="absolute z-0 ">
             <Outlet context={{ onChangeToggle }} />

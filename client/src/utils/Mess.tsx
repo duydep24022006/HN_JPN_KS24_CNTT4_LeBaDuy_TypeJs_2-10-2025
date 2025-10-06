@@ -35,7 +35,7 @@ export const showError = (mess: string[]): void => {
   ));
 };
 
-export const showSuccess = () => {
+export const showSuccess = (key: string) => {
   toast.custom((t) => (
     <div className="w-72 bg-green-50 border border-green-200 rounded-lg shadow-md p-4 text-sm text-black flex items-center gap-2">
       <span className="text-green-600 text-lg">
@@ -43,7 +43,7 @@ export const showSuccess = () => {
           <Check size={12} className="text-white" />
         </div>
       </span>
-      <p className="m-0">Đăng nhập thành công</p>
+      <p className="m-0">{key}</p>
     </div>
   ));
 };

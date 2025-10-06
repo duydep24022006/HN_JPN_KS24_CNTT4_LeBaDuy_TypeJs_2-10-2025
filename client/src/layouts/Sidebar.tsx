@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Star, SquareX, Settings, Menu, DoorClosed, X } from "lucide-react";
 // import { useLocation } from "react-router-dom";
 import HomeTrello from "../assets/HomeTrello.png";
+import { useLocation } from "react-router-dom";
+import { BarsOutlined } from "@ant-design/icons";
 
 type Props = {
   onChangeSiderbar: (key: boolean) => void;
@@ -9,15 +11,17 @@ type Props = {
 };
 
 export default function Sidebar({ onChangeSiderbar, isSiderbar }: Props) {
-  // const location = useLocation();
-  // const isActive = (path: string) => location.pathname.includes(path);
+  const location = useLocation();
+
+  const isActive = (path: string) => location.pathname.includes(path);
 
   const show = isSiderbar;
   const [isMobileView, setIsMobileView] = useState(false);
+  console.log(show);
 
   useEffect(() => {
     const checkWidth = () => {
-      setIsMobileView(window.innerWidth <= 576); // <=576px là mobile
+      setIsMobileView(window.innerWidth <= 576);
     };
     checkWidth();
     window.addEventListener("resize", checkWidth);
@@ -26,7 +30,6 @@ export default function Sidebar({ onChangeSiderbar, isSiderbar }: Props) {
 
   const sidebarContent = (
     <div className="w-full h-full bg-[#f8f9fa] flex flex-col">
-      {/* Mobile Header - Only show in mobile offcanvas */}
       {show && (
         <div className=" w-100  flex items-center justify-between px-4 py-3 bg-[#f8f9fa]">
           <img src={HomeTrello} alt="Logo" width={80} height={16.35} />
@@ -51,7 +54,8 @@ export default function Sidebar({ onChangeSiderbar, isSiderbar }: Props) {
             </p>
             <div className="space-y-0.5">
               <button className="w-full flex items-center gap-2 px-2 py-1.5 text-blue-600 hover:bg-gray-50 rounded cursor-pointer font-medium">
-                <Menu className="w-4 h-4" />
+                <BarsOutlined className="text-gray-600 text-[16px]" />
+
                 <span className="text-sm">Boards</span>
               </button>
 
@@ -86,12 +90,10 @@ export default function Sidebar({ onChangeSiderbar, isSiderbar }: Props) {
 
   return (
     <>
-      {/* Desktop Sidebar */}
       {!isMobileView && (
         <div className="w-60 h-[calc(100vh-48px)] ">{sidebarContent}</div>
       )}
 
-      {/* Mobile Button */}
       {isMobileView && (
         <>
           {show && (

@@ -20,3 +20,24 @@ export const getUser = createAsyncThunk<
     return rejectWithValue("Lỗi server" + error);
   }
 });
+export const postUser = createAsyncThunk<User, User, { rejectValue: string }>(
+  "user/postUser",
+  async (newUser, { rejectWithValue }) => {
+    try {
+      const validetaEmail = await axios.get<User[]>(
+        `http://localhost:8080/users?email=${newUser.email}`
+      );
+      if (validetaEmail.data.length > 0) {
+        return rejectWithValue("Email đã tồn tại");
+      } else {
+        const res = await axios.post<User>(
+          "http://localhost:8080/users",
+          newUser
+        );
+        return res.data;
+      }
+    } catch (error) {
+      return rejectWithValue("Lỗi server" + error);
+    }
+  }
+);

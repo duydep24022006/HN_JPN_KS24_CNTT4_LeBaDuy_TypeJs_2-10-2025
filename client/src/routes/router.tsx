@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
     element: <SignUp />,
   },
   {
-    path: "/dashboard/:id",
+    path: "/dashboard",
     element: (
       <ProtectedRoute>
         <Dashboard />

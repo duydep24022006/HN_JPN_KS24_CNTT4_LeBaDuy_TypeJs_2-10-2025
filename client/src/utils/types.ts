@@ -13,10 +13,10 @@ export interface Board {
   id: number;
   userId: number;
   title: string;
-  description: string;
+  description?: string;
   backdrop: string;
-  is_starred: boolean;
-  created_at: string;
+  is_starred?: boolean;
+  created_at?: string;
   lists?: List[];
 }
 
