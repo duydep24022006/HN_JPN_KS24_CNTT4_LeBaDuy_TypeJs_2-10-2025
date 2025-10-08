@@ -40,6 +40,7 @@ export default function Dashboard() {
         <div className={`fixed mt-12 ${isMobileView ? "z-40" : "z-20"} `}>
           <Sidebar
             onChangeSiderbar={onChangeSiderbar}
+            onChangModal={onChangeToggle}
             isSiderbar={isSiderbar}
           />
         </div>

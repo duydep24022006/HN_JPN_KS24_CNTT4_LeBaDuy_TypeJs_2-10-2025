@@ -6,7 +6,7 @@ import { confirmNotification } from "../utils/ConfirmNotification";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
-import { getAllBoard } from "../services/authApi";
+import { getAllBoard } from "../services/boardApi";
 type ContextType = {
   onChangeToggle?: (board: Board | null) => void;
 };
@@ -19,8 +19,8 @@ export default function ClosedBoards() {
   const [isMobileView, setIsMobileView] = useState(false);
   const navigate = useNavigate();
   console.log("UserID:", currentUserId);
-  const TaskList = () => {
-    navigate(`taskList`);
+  const TaskList = (id: number | undefined) => {
+    navigate(`taskList/${id}`);
   };
   useEffect(() => {
     const checkWidth = () => {
@@ -83,15 +83,25 @@ export default function ClosedBoards() {
                   isMobileView ? " w-[240px]" : "w-[270px]"
                 } h-[130px]`}
               >
-                <img
-                  src={board.backdrop}
-                  alt={board.title}
-                  className="w-full h-full object-cover"
-                />
+                {board.type === "image" ? (
+                  <img
+                    src={board.backdrop}
+                    alt={board.title}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div
+                    className={` w-full h-full object-cover `}
+                    style={{ background: board.backdrop }}
+                  ></div>
+                )}
 
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all z-0"></div>
 
-                <div className="absolute top-2.5 left-3 z-2" onClick={TaskList}>
+                <div
+                  className="absolute top-2.5 left-3 z-2"
+                  onClick={() => TaskList(board.id)}
+                >
                   <p className="text-white font-medium text-[18.5px]">
                     {board.title}
                   </p>

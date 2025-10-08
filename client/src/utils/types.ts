@@ -28,7 +28,7 @@ export interface List {
   boardId: number;
   title: string;
   created_at: string;
-  tasks?: Task[];
+  tasks: Task[];
 }
 
 // ---------------- TASK ----------------

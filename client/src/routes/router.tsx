@@ -1,12 +1,12 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Login from "../pages/auth/Login";
 import SignUp from "../pages/auth/SignUp";
 import Dashboard from "../pages/Dashboard";
 import ProtectedRoute from "../components/ProtectedRoute";
 import EventBoard from "../pages/EventBoard";
-import TaskListBoard from "../pages/TaskListBoard";
 import StarredBoards from "../pages/StarredBoards";
 import ClosedBoards from "../pages/ClosedBoards";
+import TaskListBoard from "../pages/TaskListBoard";
 
 export const router = createBrowserRouter([
   {
@@ -31,10 +31,14 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
+        element: <Navigate to="eventboard" replace />,
+      },
+      {
+        path: "eventboard",
         element: <EventBoard />,
       },
       {
-        path: "tasklist",
+        path: "eventboard/tasklist/:id",
         element: <TaskListBoard />,
       },
       {
@@ -42,8 +46,16 @@ export const router = createBrowserRouter([
         element: <StarredBoards />,
       },
       {
+        path: "starboards/tasklist/:id",
+        element: <TaskListBoard />,
+      },
+      {
         path: "closeboards",
         element: <ClosedBoards />,
+      },
+      {
+        path: "closeboards/tasklist/:id",
+        element: <TaskListBoard />,
       },
     ],
   },

@@ -4,7 +4,7 @@ import Button from "react-bootstrap/esm/Button";
 import type { Board } from "../utils/types";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../store/store";
-import { editBoard, postBoard } from "../services/authApi";
+import { editBoard, postBoard } from "../services/boardApi";
 
 type Props = {
   offChangeToggle?: (key: boolean) => void;
@@ -25,12 +25,12 @@ export default function CreateBoardModal({
   ];
 
   const colors = [
-    "#FF5722",
-    "#9C27B0",
-    "#00E676",
-    "#2196F3",
-    "#FFEB3B",
-    "#E91E63",
+    "linear-gradient(135deg,#FFB100, #FA0C00)",
+    "linear-gradient(135deg, #2609FF, #D20CFF)",
+    "linear-gradient(135deg, #00FF2F, #00FFC8)",
+    "linear-gradient(135deg, #00FFE5, #004BFA)",
+    "linear-gradient(135deg, #FFA200,#EDFA00)",
+    "linear-gradient(135deg, #FF00EA, #FA0C00)",
   ];
 
   const [selectedBg, setSelectedBg] = useState<number | null>(null);
@@ -44,7 +44,7 @@ export default function CreateBoardModal({
     if (selectedBoard) {
       setTitle(selectedBoard.title);
 
-      if (selectedBoard.backdrop.includes("#")) {
+      if (selectedBoard.backdrop.includes("linear-gradient")) {
         const index = colors.findIndex(
           (item) => item === selectedBoard.backdrop
         );
@@ -194,7 +194,7 @@ export default function CreateBoardModal({
                 >
                   <div
                     className="w-full h-full rounded-md"
-                    style={{ backgroundColor: color }}
+                    style={{ background: color }}
                   ></div>
 
                   {selectedColor === idx && (

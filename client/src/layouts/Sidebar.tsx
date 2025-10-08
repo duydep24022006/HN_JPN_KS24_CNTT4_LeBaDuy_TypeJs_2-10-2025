@@ -1,31 +1,48 @@
 import { useState, useEffect } from "react";
-import { Star, SquareX, Settings, DoorClosed, X } from "lucide-react";
+import { Star, SquareX, Settings, DoorClosed, X, Plus } from "lucide-react";
 import { BarsOutlined } from "@ant-design/icons";
 import HomeTrello from "../assets/HomeTrello.png";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import type { AppDispatch, RootState } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllBoard } from "../services/boardApi";
+import type { Board } from "../utils/types";
 
 type Props = {
   onChangeSiderbar: (key: boolean) => void;
   isSiderbar: boolean;
+  onChangModal?: (board: Board | null) => void;
 };
 
-export default function Sidebar({ onChangeSiderbar, isSiderbar }: Props) {
+export default function Sidebar({
+  onChangeSiderbar,
+  isSiderbar,
+  onChangModal,
+}: Props) {
   const navigate = useNavigate();
+  const currentUserId = Number(localStorage.getItem("currentUserId"));
+  const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
   const lastPath = location.pathname.split("/").pop();
   const show = isSiderbar;
   const [isMobileView, setIsMobileView] = useState(false);
   const [activeButton, setActiveButton] = useState<string>(lastPath || "");
-
+  const ListBoards = useSelector((data: RootState) => data.boardSlice.boards);
+  const { id } = useParams();
   useEffect(() => {
     const checkWidth = () => {
       setIsMobileView(window.innerWidth <= 576);
     };
+    if (currentUserId) {
+      dispatch(getAllBoard(currentUserId));
+    }
     checkWidth();
     window.addEventListener("resize", checkWidth);
     setActiveButton(`/${lastPath}`);
+
     return () => window.removeEventListener("resize", checkWidth);
-  }, []);
+  }, [dispatch, currentUserId]);
+  console.log(ListBoards);
 
   const handleActive = (buttonName: string) => {
     setActiveButton(buttonName);
@@ -107,18 +124,62 @@ export default function Sidebar({ onChangeSiderbar, isSiderbar }: Props) {
           </div>
         </div>
 
-        <div className="border-t border-gray-300 py-3 px-3">
-          <div className="space-y-0.5">
-            <button className="w-full flex items-center gap-2 px-2 py-1.5 text-blue-600 hover:bg-gray-50 rounded cursor-pointer">
-              <Settings className="w-4 h-4" />
-              <span className="text-sm">Settings</span>
-            </button>
+        <div className="border-t border-gray-300 py-3 px-3 flex-1 overflow-y-auto">
+          {id ? (
+            <div>
+              <div className="text-[#172B4D] font-semibold flex justify-between ">
+                <h6 className=" text-[14px] leading-[24px] tracking-[-0.04px] align-middle">
+                  Your boards
+                </h6>
+                <Plus
+                  size={18}
+                  onClick={() => {
+                    onChangModal?.(null);
+                  }}
+                />
+              </div>
+              {ListBoards && ListBoards.length > 0 ? (
+                ListBoards.map((board: Board) => (
+                  <button
+                    key={board.id}
+                    onClick={() =>
+                      navigate(`/dashboard/eventboard/tasklist/${board.id}`)
+                    }
+                    className="w-full flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer transition-colors text-left"
+                  >
+                    <div
+                      className="w-8 h-6 rounded flex-shrink-0"
+                      style={{
+                        background:
+                          board.type === "color"
+                            ? board.backdrop
+                            : `url(${board.backdrop}) center/cover no-repeat`,
+                      }}
+                    />
+                    <span className="text-sm text-gray-700 truncate font-medium">
+                      {board.title || "Untitled Board"}
+                    </span>
+                  </button>
+                ))
+              ) : (
+                <p className="text-xs text-gray-500 px-2 py-1 italic">
+                  No boards yet
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-0.5">
+              <button className="w-full flex items-center gap-2 px-2 py-1.5 text-blue-600 hover:bg-gray-50 rounded cursor-pointer">
+                <Settings className="w-4 h-4" />
+                <span className="text-sm">Settings</span>
+              </button>
 
-            <button className="w-full flex items-center gap-2 px-2 py-1.5 text-blue-600 hover:bg-gray-50 rounded cursor-pointer">
-              <DoorClosed className="w-4 h-4" />
-              <span className="text-sm">Sign out</span>
-            </button>
-          </div>
+              <button className="w-full flex items-center gap-2 px-2 py-1.5 text-blue-600 hover:bg-gray-50 rounded cursor-pointer">
+                <DoorClosed className="w-4 h-4" />
+                <span className="text-sm">Sign out</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -132,12 +193,10 @@ export default function Sidebar({ onChangeSiderbar, isSiderbar }: Props) {
 
       {isMobileView && show && (
         <>
-          {/* Backdrop */}
           <div
             className="fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity"
             onClick={() => onChangeSiderbar(false)}
           />
-          {/* Offcanvas */}
           <div
             className={`fixed top-0 right-0 bottom-0 w-[399px] max-w-full z-50 bg-[#f8f9fa] transform transition-transform duration-300 ease-in-out ${
               show ? "translate-x-0" : "translate-x-full"

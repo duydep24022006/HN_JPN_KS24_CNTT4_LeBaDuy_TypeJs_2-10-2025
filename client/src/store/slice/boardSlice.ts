@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { Board } from "../../utils/types";
-import { editBoard, getAllBoard, postBoard } from "../../services/authApi";
+import { editBoard, getAllBoard, postBoard } from "../../services/boardApi";
 
 interface BoardState {
   boards: Board[];
