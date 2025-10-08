@@ -49,3 +49,48 @@ export const getBoardWithAllData = createAsyncThunk<
     throw error;
   }
 });
+
+export const postList = createAsyncThunk(
+  "tast/postList",
+  async (newList: List) => {
+    try {
+      const res = await axios.post<List>(
+        `http://localhost:8080/lists`,
+        newList
+      );
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const postTask = createAsyncThunk(
+  "tast/postTask",
+  async (newTast: Task) => {
+    try {
+      const res = await axios.post<Task>(
+        `http://localhost:8080/tasks`,
+        newTast
+      );
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const editTask = createAsyncThunk(
+  "tast/editTask",
+  async (newTast: Task) => {
+    try {
+      const res = await axios.patch<Task>(
+        `http://localhost:8080/tasks/${newTast.id}`,
+        newTast
+      );
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);

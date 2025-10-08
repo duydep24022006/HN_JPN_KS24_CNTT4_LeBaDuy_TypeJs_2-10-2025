@@ -3,10 +3,10 @@ import {
   Star,
   MoreHorizontal,
   Plus,
-  CircleX,
   ListFilter,
   X,
   TableProperties,
+  SquareX,
 } from "lucide-react";
 import Board from "../assets/Board.svg";
 import Delete from "../assets/Frame (6).svg";
@@ -23,27 +23,56 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
 import { useParams } from "react-router-dom";
 import type { List } from "../utils/types";
-import { getBoardWithAllData } from "../services/taskListApi";
+import {
+  getBoardWithAllData,
+  postList,
+  postTask,
+} from "../services/taskListApi";
 
 export default function TaskListBoard() {
   const [isShowFormTask, setIsShowFormTask] = useState(false);
   const [isLabelModal, setIsLabelModal] = useState(false);
-  const [isLabels, setIsLabels] = useState(Boolean);
+  const [isLabels, setIsLabels] = useState(false);
   const [isMoveCard, setIsMoveCard] = useState(false);
+
   const [addingCardToList, setAddingCardToList] = useState<null | number>(null);
-  const [newCardTitle, setNewCardTitle] = useState("");
   const [addingNewList, setAddingNewList] = useState(false);
+  const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newListTitle, setNewListTitle] = useState("");
+  const [editListTitle, setEditListTitle] = useState("");
   const [editingListId, setEditingListId] = useState<null | number>(null);
-  // const [editListTitle, setEditListTitle] = useState("");
   const [isFilter, setIsFilter] = useState(false);
   const [showDate, setShowDate] = useState<boolean>(false);
+  const [error, setError] = useState({});
+  const resetAllInputs = () => {
+    setEditingListId(null);
+    setAddingCardToList(null);
+    setAddingNewList(false);
+    setNewTaskTitle("");
+    setNewListTitle("");
+    setEditListTitle("");
+    setError({
+      listTitle: "",
+      editTitle: "",
+      taskTitle: "",
+    });
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest("input") && !target.closest("button")) {
+        resetAllInputs();
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
 
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
-
   const boardState = useSelector((state: RootState) => state.listSlice);
-  const board = boardState.list;
+  const board = boardState.board;
   const lists: List[] = board?.lists || [];
 
   useEffect(() => {
@@ -51,7 +80,6 @@ export default function TaskListBoard() {
       dispatch(getBoardWithAllData(Number(id)));
     }
   }, [dispatch, id]);
-  console.log(lists);
 
   const confirm = async (key: string) => {
     const result = await confirmNotification(key);
@@ -64,15 +92,32 @@ export default function TaskListBoard() {
     }
   };
 
-  const onChangeFilter = (key: boolean) => {
-    setIsFilter(key);
+  const newListSubmit = () => {
+    if (!newListTitle.trim()) {
+      setError((prev) => ({ ...prev, listTitle: "Không được bỏ trống" }));
+      return;
+    }
+
+    const newlist: List = {
+      id: Number(
+        `${Date.now().toString().slice(-4)}${Math.floor(
+          1000 + Math.random() * 9000
+        )}`
+      ),
+      title: newListTitle,
+      boardId: Number(id),
+      created_at: new Date().toISOString(),
+      tasks: [],
+    };
+    dispatch(postList(newlist));
+    setNewListTitle("");
+    setAddingNewList(false);
   };
-  const onChangeFormTask = (key: boolean) => {
-    setIsShowFormTask(key);
-  };
+
   return (
     <div className="h-screen !w-[100%] flex flex-col bg-white overflow-hidden">
-      <div className="fixed  top-[48px] left-60 right-0 z-10  h-17 pt-3 border-b border-gray-200 bg-[#f1f2f4] flex items-center justify-between px-6">
+      {/* Header */}
+      <div className="fixed top-[48px] left-60 right-0 z-10 h-17 pt-3 border-b border-gray-200 bg-[#f1f2f4] flex items-center justify-between px-6">
         <div className="flex gap-6">
           <div className="flex items-center gap-6">
             <h2 className="text-base font-semibold text-[#172B4D]">
@@ -93,7 +138,7 @@ export default function TaskListBoard() {
               Board
             </Button>
 
-            <button className="px-2.5 py-1  hover:bg-gray-100 text-[#172B4D] rounded text-xs flex items-center gap-1.5 font-medium">
+            <button className="px-2.5 py-1 hover:bg-gray-100 text-[#172B4D] rounded text-xs flex items-center gap-1.5 font-medium">
               <TableProperties
                 size={16}
                 style={{ transform: "rotate(180deg)" }}
@@ -102,10 +147,10 @@ export default function TaskListBoard() {
             </button>
 
             <button
-              className="px-2.5 py-1  hover:bg-gray-100 text-[#172B4D] rounded text-xs flex items-center gap-1.5 font-medium"
+              className="px-2.5 py-1 hover:bg-gray-100 text-[#172B4D] rounded text-xs flex items-center gap-1.5 font-medium"
               onClick={() => confirm("close")}
             >
-              <CircleX size={16} />
+              <SquareX size={16} />
               Close this board
             </button>
           </div>
@@ -113,44 +158,55 @@ export default function TaskListBoard() {
 
         <div>
           <button
-            className="px-2.5 py-1  hover:bg-gray-100 text-[#172B4D] rounded text-xs flex items-center gap-1.5 font-medium"
-            onClick={() => onChangeFilter(true)}
+            className="px-2.5 py-1 hover:bg-gray-100 text-[#172B4D] rounded text-xs flex items-center gap-1.5 font-medium"
+            onClick={() => setIsFilter(true)}
           >
             <ListFilter size={16} />
             Filters
           </button>
         </div>
       </div>
+
       {/* Lists */}
-      <div className="flex-1 overflow-auto mt-20 p-4 flex gap-2 items-start">
+      <div className="overflow-auto mt-20 p-4 flex flex-wrap gap-2 items-start">
         {lists.map((list: List) => (
           <div
             key={list.id}
-            className="bg-gray-100 rounded-lg p-2 w-64 flex-shrink-0"
+            className="bg-gray-100 w-[272px] rounded-lg p-2 flex-shrink-0"
           >
             <div className="flex items-center justify-between mb-2 px-1">
               {editingListId === list.id ? (
                 <input
                   type="text"
                   defaultValue={list.title}
+                  value={editListTitle}
+                  onChange={(e) => setEditListTitle(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Escape") setEditingListId(null);
+                    if (e.key === "Enter" || e.key === "Escape") {
+                      resetAllInputs();
+                    }
                   }}
-                  onBlur={() => setEditingListId(null)}
-                  className="bg-white flex-1 px-2 py-1 text-sm font-semibold text-[#172B4D] border border-blue-500 rounded focus:outline-none"
+                  onClick={(e) => e.stopPropagation()}
                   autoFocus
+                  className="bg-white flex-1 px-2 py-1 text-sm font-semibold text-[#172B4D] border border-blue-500 rounded focus:outline-none"
                 />
               ) : (
                 <>
                   <h6
                     className="font-semibold text-[#172B4D] text-sm cursor-pointer hover:bg-gray-200 px-1 py-0.5 rounded"
-                    onClick={() => setEditingListId(list.id)}
+                    onClick={() => {
+                      resetAllInputs();
+                      setEditingListId(list.id);
+                    }}
                   >
                     {list.title}
                   </h6>
                   <button
                     className="text-gray-600 hover:bg-gray-200 p-0.5 rounded"
-                    onClick={() => setEditingListId(list.id)}
+                    onClick={() => {
+                      resetAllInputs();
+                      setEditingListId(list.id);
+                    }}
                   >
                     <MoreHorizontal size={14} />
                   </button>
@@ -158,123 +214,115 @@ export default function TaskListBoard() {
               )}
             </div>
 
-            {list.tasks.length > 0 && (
-              <div className="space-y-1.5 mb-2">
-                {list.tasks.map((task) => (
-                  <div
-                    key={task.id}
-                    className="bg-white rounded shadow-sm p-2 mb-2 hover:bg-gray-50 cursor-pointer"
-                    onClick={() => setIsShowFormTask(true)}
-                  >
-                    <div className="flex items-start gap-2">
-                      {task.status ? (
-                        <div
-                          className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                            task.status
-                              ? "bg-green-500"
-                              : "bg-white border-2 border-gray-400"
-                          }`}
-                        >
-                          {task.status && (
-                            <svg
-                              className="w-2.5 h-2.5 text-white"
-                              fill="none"
-                              strokeWidth="3"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                          )}
-                        </div>
-                      ) : (
-                        <></>
-                      )}
-
-                      <span className="text-sm text-gray-800">
-                        {task.title}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+            {/* Tasks */}
+            {list.tasks?.length > 0 &&
+              list.tasks.map((task) => (
+                <div
+                  key={task.id}
+                  className="bg-white rounded shadow-sm p-2 mb-2 hover:bg-gray-50 cursor-pointer"
+                  onClick={() => setIsShowFormTask(true)}
+                >
+                  <span className="text-sm text-gray-800">{task.title}</span>
+                </div>
+              ))}
 
             {/* Add Card */}
-            <div className="flex justify-between items-center">
-              {addingCardToList === list.id ? (
-                <div className="w-full space-y-2">
-                  <input
-                    type="text"
-                    value={newCardTitle}
-                    onChange={(e) => setNewCardTitle(e.target.value)}
-                    placeholder="Enter a title or paste a link"
-                    className="bg-white w-full mb-2 px-2 py-1.5 shadow-[inset_0_0_0_1px_#8590A2] placeholder:font-semibold text-[14px] leading-[20px] tracking-[0%] align-middle  text-sm  rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    autoFocus
-                  />
-                  <div className="flex items-center gap-1">
-                    <button className="px-3 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">
-                      Add card
-                    </button>
-                    <button
-                      onClick={() => {
-                        setAddingCardToList(null);
-                        setNewCardTitle("");
-                      }}
-                      className="p-1.5 hover:bg-gray-200 rounded"
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <button
-                    onClick={() => setAddingCardToList(list.id)}
-                    className="w-full text-left px-2 py-1.5 text-gray-700 hover:bg-gray-200 rounded text-sm flex items-center gap-1.5"
-                  >
-                    <Plus size={14} />
-                    <span className="font-medium text-[14px] text-[#44546F] leading-[20px] tracking-[0px] text-center">
-                      Add a card
-                    </span>
+            {addingCardToList === list.id ? (
+              <div className="w-full space-y-2">
+                <input
+                  type="text"
+                  value={newTaskTitle}
+                  onChange={(e) => setNewTaskTitle(e.target.value)}
+                  placeholder="Enter a title or paste a link"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") resetAllInputs();
+                    if (e.key === "Escape") resetAllInputs();
+                  }}
+                  className="bg-white w-full h-[56px] mb-2 px-2 py-1.5 shadow-[inset_0_0_0_1px_#8590A2] text-sm rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  autoFocus
+                  onClick={(e) => e.stopPropagation()}
+                />
+                <div className="flex items-center gap-1">
+                  <button className="px-3 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">
+                    Add card
                   </button>
-                  <img
-                    src={Delete}
-                    alt=""
-                    width={16}
-                    height={16}
-                    onClick={() => confirm("delete")}
-                    className="cursor-pointer "
-                  />
-                </>
-              )}
-            </div>
+                  <button
+                    onClick={resetAllInputs}
+                    className="p-1.5 hover:bg-gray-200 rounded"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex justify-between items-center">
+                <button
+                  onClick={() => {
+                    resetAllInputs();
+                    setAddingCardToList(list.id);
+                  }}
+                  className="w-full text-left px-2 py-1.5 text-gray-700 hover:bg-gray-200 rounded text-sm flex items-center gap-1.5"
+                >
+                  <Plus size={14} />
+                  <span className="font-medium text-[14px] text-[#44546F] leading-[20px] tracking-[0px] text-center">
+                    Add a card
+                  </span>
+                </button>
+                <img
+                  src={Delete}
+                  alt=""
+                  width={16}
+                  height={16}
+                  onClick={() => confirm("delete")}
+                  className="cursor-pointer "
+                />
+              </div>
+            )}
           </div>
         ))}
 
+        {/* Add new list */}
         <div className="bg-gray-100 rounded-lg p-2 w-64 flex-shrink-0">
           {addingNewList ? (
             <div className="space-y-2">
-              <input
-                type="text"
-                value={newListTitle}
-                onChange={(e) => setNewListTitle(e.target.value)}
-                placeholder="Enter list name..."
-                className="bg-white w-full px-2 mb-2 py-1.5 shadow-[inset_0_0_0_1px_#8590A2] placeholder:font-semibold text-[14px] leading-[20px] tracking-[0%] align-middle text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                autoFocus
-              />
+              <div>
+                <input
+                  type="text"
+                  value={newListTitle}
+                  onChange={(e) => {
+                    setNewListTitle(e.target.value);
+                    setError({
+                      listTitle: "",
+                      editTitle: "",
+                      taskTitle: "",
+                    });
+                  }}
+                  placeholder="Enter list name..."
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") newListSubmit();
+                    if (e.key === "Escape") resetAllInputs();
+                  }}
+                  className="bg-white w-full px-2 mb-2 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  autoFocus
+                  onClick={(e) => e.stopPropagation()}
+                />
+                {error.listTitle && (
+                  <p className="text-red-500">{error.listTitle}</p>
+                )}
+              </div>
+
               <div className="flex items-center gap-1">
-                <button className="px-3 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">
+                <button
+                  className="px-3 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+                  onClick={() => {
+                    newListSubmit();
+                  }}
+                >
                   Add list
                 </button>
                 <button
                   onClick={() => {
-                    setAddingNewList(false);
-                    setNewListTitle("");
+                    resetAllInputs();
                   }}
                   className="p-1.5 hover:bg-gray-200 rounded"
                 >
@@ -284,25 +332,25 @@ export default function TaskListBoard() {
             </div>
           ) : (
             <button
-              onClick={() => setAddingNewList(true)}
+              onClick={() => {
+                resetAllInputs();
+                setAddingNewList(true);
+              }}
               className="w-full text-left px-2 py-1.5 text-[#172B4D] hover:bg-gray-200 rounded text-sm flex items-center gap-1.5"
             >
               <Plus size={14} />
-              <span className="font-medium text-[14px] leading-[20px] tracking-[0px] text-center">
-                Add another list
-              </span>
+              <span className="font-medium text-[14px]">Add another list</span>
             </button>
           )}
         </div>
       </div>
-      <FilterDropdown
-        onClose={() => onChangeFilter(false)}
-        isFilter={isFilter}
-      />
+
+      {/* Modals */}
+      <FilterDropdown onClose={() => setIsFilter(false)} isFilter={isFilter} />
       <DatePickerModal isOpen={showDate} onClose={() => setShowDate(false)} />
       <FormTask
         isShowFormTask={isShowFormTask}
-        onClose={() => onChangeFormTask(false)}
+        onClose={() => setIsShowFormTask(false)}
         onShowDate={() => setShowDate(true)}
         onShowMoveCard={() => setIsMoveCard(true)}
         onShowLabel={() => setIsLabels(true)}

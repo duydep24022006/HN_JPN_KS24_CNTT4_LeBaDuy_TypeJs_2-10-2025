@@ -22,7 +22,7 @@ export default function FilterDropdown({ onClose, isFilter }: Props) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl w-[390px] h-[700px] overflow-hidden">
+      <div className="bg-white rounded-lg shadow-xl w-[390px] h-[680px] overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-center relative px-4 py-3 border-b border-gray-200">
           <h3 className="text-sm font-medium text-gray-800">Filter</h3>
@@ -35,7 +35,7 @@ export default function FilterDropdown({ onClose, isFilter }: Props) {
         </div>
 
         {/* Content */}
-        <div className="px-3 py-4 space-y-4 max-h-[600px] overflow-y-auto">
+        <div className="px-3 py-4 max-h-[600px] overflow-y-auto">
           {/* Keyword */}
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1.5">
@@ -152,7 +152,10 @@ export default function FilterDropdown({ onClose, isFilter }: Props) {
               <div className="flex  items-center ">
                 <div className="flex flex-col gap-2">
                   <div className="flex gap-3 ">
-                    <input type="checkbox" className="" />
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 border border-gray-400 rounded cursor-pointer accent-blue-600"
+                    />
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center">
                         <Tag size={16} className="rotate-270" />
@@ -162,29 +165,42 @@ export default function FilterDropdown({ onClose, isFilter }: Props) {
                       </label>
                     </div>
                   </div>
-                  <div className="flex gap-3 ">
-                    <input type="checkbox" className="" />
+                  <div className="flex gap-3 items-center">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 border border-gray-400 rounded cursor-pointer accent-blue-600"
+                    />
                     <label>
-                      <div className="flex-1 w-[310px] h-8 bg-emerald-500 rounded"></div>
+                      <div className="flex-1 w-[330px] h-8 bg-emerald-500 rounded"></div>
                     </label>
                   </div>
-                  <div className="flex gap-3 ">
-                    <input type="checkbox" className="" />
+                  <div className="flex gap-3 items-center">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 border border-gray-400 rounded cursor-pointer accent-blue-600"
+                    />
                     <label>
-                      <div className="flex-1 w-[310px]  h-8 bg-yellow-400 rounded"></div>
+                      <div className="flex-1 w-[330px]  h-8 bg-yellow-400 rounded"></div>
                     </label>
                   </div>
-                  <div className="flex gap-3 ">
-                    <input type="checkbox" className="" />
+                  <div className="flex gap-3 items-center">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 border border-gray-400 rounded cursor-pointer accent-blue-600"
+                    />
                     <label>
-                      <div className="flex-1 w-[310px]  h-8 bg-orange-400 rounded"></div>
+                      <div className="flex-1 w-[330px]  h-8 bg-orange-400 rounded"></div>
                     </label>
                   </div>
                 </div>
               </div>
 
-              <div className="relative">
-                <select className="w-full px-2.5 py-2 text-sm text-gray-600 border-2 border-blue-500 rounded appearance-none cursor-pointer focus:outline-none bg-white">
+              <div className="relative flex justify-center items-center">
+                <input
+                  type="checkbox"
+                  className="w-4 h-4 border border-gray-400 rounded cursor-pointer accent-blue-600"
+                />
+                <select className="w-full px-2.5 py-2 text-sm text-gray-600 border-0 border-blue-500 rounded appearance-none cursor-pointer focus:outline-none bg-white">
                   <option>Select labels</option>
                 </select>
                 <svg

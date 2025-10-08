@@ -28,16 +28,16 @@
       "userId": 1,
       "title": "Dự án Website",
       "description": "Quản lý tiến độ dự án website",
-      "backdrop": "https://res.cloudinary.com/dytn1lbpl/image/upload/v1759734763/image_8_aouypf.jpg",
+      "backdrop": "linear-gradient(135deg, #00FF2F, #00FFC8)",
       "is_starred": true,
       "is_close": false,
       "created_at": "2025-02-28T12:30:00Z",
-      "type": "image"
+      "type": "color"
     },
     {
       "id": 102,
       "userId": 1,
-      "title": "Dự án Webs",
+      "title": "Dự án Webs11",
       "description": "Quản lý tiến độ dự án website",
       "backdrop": "https://res.cloudinary.com/dytn1lbpl/image/upload/v1759734739/image_6_vvfo8r.jpg",
       "is_starred": false,
@@ -50,11 +50,11 @@
       "userId": 1,
       "title": "Dự án Website",
       "description": "Quản lý tiến độ dự án website",
-      "backdrop": "https://res.cloudinary.com/dytn1lbpl/image/upload/v1759734739/image_6_vvfo8r.jpg",
+      "backdrop": "linear-gradient(135deg, #FF00EA, #FA0C00)",
       "is_starred": false,
       "is_close": true,
       "created_at": "2025-02-28T12:30:00Z",
-      "type": "image"
+      "type": "color"
     },
     {
       "id": 82274965,
@@ -97,6 +97,20 @@
       "boardId": 103,
       "title": "Việc cần làm",
       "created_at": "2025-02-28T13:00:00Z"
+    },
+    {
+      "id": 63742325,
+      "title": "ádf",
+      "boardId": 102,
+      "created_at": "2025-10-08T21:12:56.374Z",
+      "tasks": []
+    },
+    {
+      "id": 4508670,
+      "title": "âsa",
+      "boardId": 102,
+      "created_at": "2025-10-08T21:18:20.450Z",
+      "tasks": []
     }
   ],
   "tasks": [
@@ -105,7 +119,16 @@
       "listId": 201,
       "title": "Thiết kế giao diện",
       "description": "Tạo wireframe cho trang chủ",
-      "status": "pending",
+      "status": true,
+      "due_date": "2025-03-05T23:59:59Z",
+      "created_at": "2025-02-28T13:30:00Z"
+    },
+    {
+      "id": 302,
+      "listId": 201,
+      "title": "Thiết kế giao diện",
+      "description": "Tạo wireframe cho trang chủ",
+      "status": false,
       "due_date": "2025-03-05T23:59:59Z",
       "created_at": "2025-02-28T13:30:00Z"
     },
@@ -114,7 +137,7 @@
       "listId": 202,
       "title": "Thiết kế giao diện",
       "description": "Tạo wireframe cho trang chủ",
-      "status": "pending",
+      "status": false,
       "due_date": "2025-03-05T23:59:59Z",
       "created_at": "2025-02-28T13:30:00Z"
     },
@@ -123,7 +146,7 @@
       "listId": 203,
       "title": "Thiết kế giao diện",
       "description": "Tạo wireframe cho trang chủ",
-      "status": "pending",
+      "status": false,
       "due_date": "2025-03-05T23:59:59Z",
       "created_at": "2025-02-28T13:30:00Z"
     }

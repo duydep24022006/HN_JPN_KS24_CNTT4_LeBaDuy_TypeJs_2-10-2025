@@ -3,7 +3,7 @@ import type { Board } from "../utils/types";
 import axios from "axios";
 
 export const getAllBoard = createAsyncThunk(
-  "user/getAllBoard",
+  "board/getAllBoard",
   async (currentUserId: number) => {
     try {
       const res = await axios.get(
@@ -16,7 +16,7 @@ export const getAllBoard = createAsyncThunk(
   }
 );
 export const postBoard = createAsyncThunk(
-  "user/postBoard",
+  "board/postBoard",
   async (newBoard: Board) => {
     try {
       const res = await axios.post<Board>(
@@ -31,7 +31,7 @@ export const postBoard = createAsyncThunk(
 );
 
 export const editBoard = createAsyncThunk(
-  "user/editBoard",
+  "board/editBoard",
   async (newBoard: Board) => {
     try {
       const res = await axios.patch<Board>(

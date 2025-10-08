@@ -41,8 +41,7 @@ export default function Sidebar({
     setActiveButton(`/${lastPath}`);
 
     return () => window.removeEventListener("resize", checkWidth);
-  }, [dispatch, currentUserId]);
-  console.log(ListBoards);
+  }, [dispatch, id]);
 
   const handleActive = (buttonName: string) => {
     setActiveButton(buttonName);

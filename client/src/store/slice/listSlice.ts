@@ -1,21 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getBoardWithAllData } from "../../services/taskListApi";
-import type { List } from "../../utils/types";
+import {
+  getBoardWithAllData,
+  postList,
+  postTask,
+} from "../../services/taskListApi";
+import type { Board, List, Task } from "../../utils/types";
 
-interface Lists {
-  id: number;
-  title: string;
-  lists: List[];
-}
-
-interface ListState {
-  list: Lists | null;
+interface BoardState {
+  board: Board | null;
   loading: boolean;
+  error: string | null;
 }
 
-const initialState: ListState = {
-  list: null,
+const initialState: BoardState = {
+  board: null,
   loading: false,
+  error: null,
 };
 
 const boardSlice = createSlice({
@@ -26,13 +26,40 @@ const boardSlice = createSlice({
     builder
       .addCase(getBoardWithAllData.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(getBoardWithAllData.fulfilled, (state, action) => {
         state.loading = false;
-        state.list = action.payload;
+        state.board = action.payload;
       })
-      .addCase(getBoardWithAllData.rejected, (state) => {
+      .addCase(getBoardWithAllData.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.error.message || "Không thể tải dữ liệu board";
+      })
+
+      .addCase(postList.fulfilled, (state, action) => {
+        state.loading = false;
+        const newList = action.payload as List;
+        if (state.board?.lists) {
+          state.board.lists.push(newList);
+        } else if (state.board) {
+          state.board.lists = [newList];
+        }
+      })
+
+      .addCase(postTask.fulfilled, (state, action) => {
+        state.loading = false;
+        const newTask = action.payload as Task;
+        if (state.board?.lists) {
+          const list = state.board.lists.find((l) => l.id === newTask.listId);
+          if (list) {
+            list.tasks.push(newTask);
+          }
+        }
+      })
+      .addCase(postTask.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Không thể tạo task mới";
       });
   },
 });

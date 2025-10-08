@@ -28,7 +28,7 @@ export interface List {
   boardId: number;
   title: string;
   created_at: string;
-  tasks: Task[];
+  tasks?: Task[];
 }
 
 // ---------------- TASK ----------------
@@ -37,7 +37,7 @@ export interface Task {
   listId: number;
   title: string;
   description: string;
-  status: "pending" | "in_progress" | "done";
+  status: boolean;
   due_date: string;
   created_at: string;
   tags?: Tag[];

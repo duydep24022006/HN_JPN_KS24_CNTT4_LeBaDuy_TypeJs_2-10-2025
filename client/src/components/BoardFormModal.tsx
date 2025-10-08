@@ -42,6 +42,7 @@ export default function CreateBoardModal({
 
   useEffect(() => {
     if (selectedBoard) {
+      setShowError(false);
       setTitle(selectedBoard.title);
 
       if (selectedBoard.backdrop.includes("linear-gradient")) {
