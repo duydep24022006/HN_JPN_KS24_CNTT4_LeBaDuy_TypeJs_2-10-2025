@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import Board from "../assets/Board.svg";
 import Delete from "../assets/Frame (6).svg";
-
 import Button from "react-bootstrap/esm/Button";
 import { confirmNotification } from "../utils/ConfirmNotification";
 import Swal from "sweetalert2";
@@ -19,7 +18,7 @@ import { DatePickerModal } from "../components/DatePickerModal";
 import FormTask from "../components/FormTask";
 import MoveCard from "../components/MoveCard";
 import Labels from "../components/Labels";
-import LabelModal from "../components/labelModal";
+import LabelModal from "../components/LabelModal";
 
 export default function TaskListBoard() {
   const [lists, setLists] = useState([
@@ -45,11 +44,11 @@ export default function TaskListBoard() {
   const [isLabelModal, setIsLabelModal] = useState(false);
   const [isLabels, setIsLabels] = useState(Boolean);
   const [isMoveCard, setIsMoveCard] = useState(false);
-  const [addingCardToList, setAddingCardToList] = useState(null);
+  const [addingCardToList, setAddingCardToList] = useState<null | number>(null);
   const [newCardTitle, setNewCardTitle] = useState("");
   const [addingNewList, setAddingNewList] = useState(false);
   const [newListTitle, setNewListTitle] = useState("");
-  const [editingListId, setEditingListId] = useState(null);
+  const [editingListId, setEditingListId] = useState<null | number>(null);
   // const [editListTitle, setEditListTitle] = useState("");
   const [isFilter, setIsFilter] = useState(false);
   const [showDate, setShowDate] = useState<boolean>(false);

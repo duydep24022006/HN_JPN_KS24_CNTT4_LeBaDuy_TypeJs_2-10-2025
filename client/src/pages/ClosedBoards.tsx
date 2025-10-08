@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Star, Edit2, Trash, Calendar, SquareX } from "lucide-react";
+import { Edit2, Trash, Calendar, SquareX } from "lucide-react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import type { Board } from "../utils/types";
 import { confirmNotification } from "../utils/ConfirmNotification";

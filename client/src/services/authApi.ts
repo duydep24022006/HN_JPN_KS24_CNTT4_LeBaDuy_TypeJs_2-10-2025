@@ -46,7 +46,7 @@ export const getAllBoard = createAsyncThunk(
   "user/getAllBoard",
   async (currentUserId: number) => {
     try {
-      const res = await axios.get<Board[]>(
+      const res = await axios.get(
         `http://localhost:8080/users/${currentUserId}?_embed=boards`
       );
       return res.data.boards;
