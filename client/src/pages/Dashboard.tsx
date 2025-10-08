@@ -10,6 +10,7 @@ export default function Dashboard() {
   const [isSiderbar, setIsSiderbar] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
   const [selectedBoard, setSelectedBoard] = useState<Board | null>(null);
+
   useEffect(() => {
     const checkWidth = () => {
       setIsMobileView(window.innerWidth <= 576);

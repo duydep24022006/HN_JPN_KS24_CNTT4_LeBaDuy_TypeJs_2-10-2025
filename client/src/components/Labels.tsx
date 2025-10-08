@@ -1,17 +1,21 @@
 import { X, Pencil } from "lucide-react";
 type Props = {
-  isOpen: boolean;
+  isOpenModal: boolean;
   onClose: () => void;
   onShowLabelModal: () => void;
 };
-export default function Labels({ isOpen, onClose, onShowLabelModal }: Props) {
+export default function Labels({
+  isOpenModal,
+  onClose,
+  onShowLabelModal,
+}: Props) {
   const labels = [
     { id: 1, name: "done", color: "bg-green-400" },
     { id: 2, name: "urgent", color: "bg-orange-400" },
     { id: 3, name: "todo", color: "bg-red-400" },
     { id: 4, name: "in-progress", color: "bg-purple-400" },
   ];
-  if (!isOpen) return <></>;
+  if (!isOpenModal) return <></>;
   return (
     <div className=" w-full h-full fixed z-50  flex items-center justify-center p-4">
       <div className="bg-white rounded-lg shadow-xl" style={{ width: "304px" }}>

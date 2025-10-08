@@ -50,7 +50,7 @@ export default function TaskListBoard() {
   const [addingNewList, setAddingNewList] = useState(false);
   const [newListTitle, setNewListTitle] = useState("");
   const [editingListId, setEditingListId] = useState(null);
-  //   const [editListTitle, setEditListTitle] = useState("");
+  // const [editListTitle, setEditListTitle] = useState("");
   const [isFilter, setIsFilter] = useState(false);
   const [showDate, setShowDate] = useState<boolean>(false);
   const confirm = async (key: string) => {
@@ -139,7 +139,7 @@ export default function TaskListBoard() {
                     if (e.key === "Escape") setEditingListId(null);
                   }}
                   onBlur={() => setEditingListId(null)}
-                  className="flex-1 px-2 py-1 text-sm font-semibold text-[#172B4D] border border-blue-500 rounded focus:outline-none"
+                  className="bg-white flex-1 px-2 py-1 text-sm font-semibold text-[#172B4D] border border-blue-500 rounded focus:outline-none"
                   autoFocus
                 />
               ) : (
@@ -150,7 +150,10 @@ export default function TaskListBoard() {
                   >
                     {list.title}
                   </h6>
-                  <button className="text-gray-600 hover:bg-gray-200 p-0.5 rounded">
+                  <button
+                    className="text-gray-600 hover:bg-gray-200 p-0.5 rounded"
+                    onClick={() => setEditingListId(list.id)}
+                  >
                     <MoreHorizontal size={14} />
                   </button>
                 </>
@@ -208,12 +211,12 @@ export default function TaskListBoard() {
             <div className="flex justify-between items-center">
               {addingCardToList === list.id ? (
                 <div className="w-full space-y-2">
-                  <textarea
+                  <input
+                    type="text"
                     value={newCardTitle}
                     onChange={(e) => setNewCardTitle(e.target.value)}
                     placeholder="Enter a title or paste a link"
-                    className="w-ful mb-2 px-2 py-1.5 hadow-[inset_0_0_0_1px_#8590A2] placeholder:font-semibold text-[14px] leading-[20px] tracking-[0%] align-middle  text-sm border border-gray-300 rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    rows={3}
+                    className="bg-white w-full mb-2 px-2 py-1.5 shadow-[inset_0_0_0_1px_#8590A2] placeholder:font-semibold text-[14px] leading-[20px] tracking-[0%] align-middle  text-sm  rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                     autoFocus
                   />
                   <div className="flex items-center gap-1">
@@ -256,7 +259,6 @@ export default function TaskListBoard() {
           </div>
         ))}
 
-        {/* Add Another List */}
         <div className="bg-gray-100 rounded-lg p-2 w-64 flex-shrink-0">
           {addingNewList ? (
             <div className="space-y-2">
@@ -265,7 +267,7 @@ export default function TaskListBoard() {
                 value={newListTitle}
                 onChange={(e) => setNewListTitle(e.target.value)}
                 placeholder="Enter list name..."
-                className="w-full px-2 mb-2 py-1.5 shadow-[inset_0_0_0_1px_#8590A2] placeholder:font-semibold text-[14px] leading-[20px] tracking-[0%] align-middle text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="bg-white w-full px-2 mb-2 py-1.5 shadow-[inset_0_0_0_1px_#8590A2] placeholder:font-semibold text-[14px] leading-[20px] tracking-[0%] align-middle text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 autoFocus
               />
               <div className="flex items-center gap-1">
@@ -310,7 +312,7 @@ export default function TaskListBoard() {
       />
       <MoveCard isMoveCard={isMoveCard} onClose={() => setIsMoveCard(false)} />
       <Labels
-        isOpen={isLabels}
+        isOpenModal={isLabels}
         onClose={() => setIsLabels(false)}
         onShowLabelModal={() => setIsLabelModal(true)}
       />

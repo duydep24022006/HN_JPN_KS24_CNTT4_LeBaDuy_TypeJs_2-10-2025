@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
-import { Star, Menu, Calendar, Edit2, Trash } from "lucide-react";
+import { Star, Calendar, Edit2, Trash } from "lucide-react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import type { Board } from "../utils/types";
 import { confirmNotification } from "../utils/ConfirmNotification";
 import Swal from "sweetalert2";
 import { BarsOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../store/store";
+import { getAllBoard } from "../services/authApi";
 type ContextType = {
   onChangeToggle?: (board: Board | null) => void;
 };
 
 export default function EventBoard() {
   const { onChangeToggle } = useOutletContext<ContextType>();
+  const currentUserId = Number(localStorage.getItem("currentUserId"));
+  const dispatch = useDispatch<AppDispatch>();
+  const ListBoards = useSelector((data: RootState) => data.boardSlice.boards);
   const [isMobileView, setIsMobileView] = useState(false);
   const navigate = useNavigate();
   const TaskList = () => {
@@ -20,10 +26,21 @@ export default function EventBoard() {
     const checkWidth = () => {
       setIsMobileView(window.innerWidth <= 577);
     };
+    if (currentUserId) {
+      dispatch(getAllBoard(currentUserId));
+    }
     checkWidth();
     window.addEventListener("resize", checkWidth);
     return () => window.removeEventListener("resize", checkWidth);
-  }, []);
+  }, [dispatch, currentUserId]);
+
+  const boards = ListBoards.filter(
+    (item) => item.is_starred === false && item.is_close === false
+  );
+  const starredBoards = ListBoards.filter(
+    (item) => item.is_starred === true && item.is_close === false
+  );
+
   const confirm = async (key: string) => {
     const result = await confirmNotification(key);
     if (result) {
@@ -34,57 +51,14 @@ export default function EventBoard() {
       });
     }
   };
-  const [boards] = useState([
-    {
-      id: 1,
-      title: "Board Title 01",
-      backdrop:
-        "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400&h=300&fit=crop",
-    },
-    {
-      id: 2,
-      title: "Board Title 02",
-      backdrop:
-        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
-    },
-    {
-      id: 3,
-      title: "Board Title 03",
-      backdrop:
-        "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400&h=300&fit=crop",
-    },
-    {
-      id: 4,
-      title: "Board Title 01",
-      backdrop:
-        "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400&h=300&fit=crop",
-    },
-  ]);
-
-  const [starredBoards] = useState([
-    {
-      id: 1,
-      title: "Important Board 01",
-      backdrop:
-        "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400&h=300&fit=crop",
-    },
-    {
-      id: 2,
-      title: "Important Board 02",
-      backdrop:
-        "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400&h=300&fit=crop",
-    },
-  ]);
 
   return (
     <div className=" min-h-[calc(100vh-64px)] bg-white ">
-      <div className="h-[calc(100vh-240px)] p-6">
-        <div className="flex items-center justify-between mb-6 pb-1 border-b border-gray-200">
-          <div className="flex items-center gap-3">
-            <BarsOutlined className="text-gray-600 text-[32px]" />
-            <h2 className="text-lg font-normal text-gray-900">
-              Your Workspaces
-            </h2>
+      <div className="h-[calc(100vh-240px)] w-[calc(100vw-240px)] p-6">
+        <div className="flex  items-center justify-between mb-6 pb-1 border-b border-gray-200">
+          <div className="flex items-center gap-3 text-[#212529]">
+            <BarsOutlined className=" text-[32px]" />
+            <h2 className="text-lg font-normal ">Your Workspaces</h2>
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center border-0 ">
@@ -109,7 +83,7 @@ export default function EventBoard() {
               key={board.id}
               className={`relative rounded-[5px] overflow-hidden group cursor-pointer ${
                 isMobileView ? " w-[240px]" : "w-[270px]"
-              } h-[130px]`}
+              } h-[130px] active:scale-105 transition-transform duration-300`}
             >
               <img
                 src={board.backdrop}
@@ -184,11 +158,11 @@ export default function EventBoard() {
 
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all z-0"></div>
 
-                <div className="absolute top-2.5 left-3 z-2">
-                  <p
-                    className="text-white font-medium text-[18.5px]"
-                    onClick={() => confirm("delete")}
-                  >
+                <div
+                  className="absolute top-2.5 left-3 z-2 "
+                  onClick={TaskList}
+                >
+                  <p className="text-white font-medium text-[18.5px]">
                     {board.title}
                   </p>
                 </div>

@@ -10,12 +10,14 @@ export interface User {
 
 // ---------------- BOARD ----------------
 export interface Board {
-  id: number;
-  userId: number;
+  id?: number;
+  userId?: number;
   title: string;
   description?: string;
+  type: "image" | "color";
   backdrop: string;
   is_starred?: boolean;
+  is_close?: boolean;
   created_at?: string;
   lists?: List[];
 }

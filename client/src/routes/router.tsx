@@ -5,6 +5,8 @@ import Dashboard from "../pages/Dashboard";
 import ProtectedRoute from "../components/ProtectedRoute";
 import EventBoard from "../pages/EventBoard";
 import TaskListBoard from "../pages/TaskListBoard";
+import StarredBoards from "../pages/StarredBoards";
+import ClosedBoards from "../pages/ClosedBoards";
 
 export const router = createBrowserRouter([
   {
@@ -15,7 +17,6 @@ export const router = createBrowserRouter([
     path: "/login",
     element: <Login />,
   },
-
   {
     path: "/register",
     element: <SignUp />,
@@ -33,8 +34,16 @@ export const router = createBrowserRouter([
         element: <EventBoard />,
       },
       {
-        path: "taskList",
+        path: "tasklist",
         element: <TaskListBoard />,
+      },
+      {
+        path: "starboards",
+        element: <StarredBoards />,
+      },
+      {
+        path: "closeboards",
+        element: <ClosedBoards />,
       },
     ],
   },

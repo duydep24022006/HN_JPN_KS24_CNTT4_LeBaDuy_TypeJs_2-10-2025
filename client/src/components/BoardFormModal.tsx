@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { X, Check } from "lucide-react";
 import Button from "react-bootstrap/esm/Button";
 import type { Board } from "../utils/types";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "../store/store";
+import { editBoard, postBoard } from "../services/authApi";
 
 type Props = {
   offChangeToggle?: (key: boolean) => void;
@@ -34,14 +37,14 @@ export default function CreateBoardModal({
   const [selectedColor, setSelectedColor] = useState<number | null>(null);
   const [title, setTitle] = useState("");
   const [showError, setShowError] = useState(false);
+  const currentUserId = Number(localStorage.getItem("currentUserId"));
+  const dispatch = useDispatch<AppDispatch>();
 
-  // Initialize from selectedBoard
   useEffect(() => {
     if (selectedBoard) {
       setTitle(selectedBoard.title);
 
       if (selectedBoard.backdrop.includes("#")) {
-        // It's a color
         const index = colors.findIndex(
           (item) => item === selectedBoard.backdrop
         );
@@ -50,7 +53,6 @@ export default function CreateBoardModal({
           setSelectedBg(null);
         }
       } else {
-        // It's an image
         const index = backgrounds.findIndex(
           (item) => item === selectedBoard.backdrop
         );
@@ -60,23 +62,20 @@ export default function CreateBoardModal({
         }
       }
     } else {
-      // Default selection for new board
       setSelectedBg(0);
       setSelectedColor(null);
       setTitle("");
     }
   }, [selectedBoard]);
 
-  // Handle background image selection
   const handleBgSelect = (idx: number) => {
     setSelectedBg(idx);
-    setSelectedColor(null); // Deselect color
+    setSelectedColor(null);
   };
 
-  // Handle color selection
   const handleColorSelect = (idx: number) => {
     setSelectedColor(idx);
-    setSelectedBg(null); // Deselect background image
+    setSelectedBg(null);
   };
 
   const handleCreate = () => {
@@ -92,19 +91,45 @@ export default function CreateBoardModal({
         ? colors[selectedColor]
         : backgrounds[0];
 
-    setShowError(false);
-    console.log({
-      title,
-      backdrop,
-      type: selectedBg !== null ? "image" : "color",
-    });
+    if (selectedBoard !== null) {
+      const newBoard: Board = {
+        id: selectedBoard.id,
+        title,
+        backdrop,
+        type: selectedBg !== null ? "image" : "color",
+      };
+      console.log(newBoard);
+      dispatch(editBoard(newBoard));
 
-    alert(`Board "${title}" ${selectedBoard ? "updated" : "created"}!`);
-
-    // Reset form
-    setTitle("");
-    setSelectedBg(0);
-    setSelectedColor(null);
+      setShowError(false);
+      offChangeToggle?.(false);
+      setTitle("");
+      setSelectedBg(0);
+      setSelectedColor(null);
+    } else {
+      const newBoard: Board = {
+        id: Number(
+          `${Date.now().toString().slice(-4)}${Math.floor(
+            1000 + Math.random() * 9000
+          )}`
+        ),
+        title,
+        backdrop,
+        userId: currentUserId,
+        type: selectedBg !== null ? "image" : "color",
+        is_starred: false,
+        is_close: false,
+        description: "",
+        created_at: new Date().toISOString(),
+      };
+      console.log(newBoard);
+      dispatch(postBoard(newBoard));
+      setShowError(false);
+      offChangeToggle?.(false);
+      setTitle("");
+      setSelectedBg(0);
+      setSelectedColor(null);
+    }
   };
 
   if (!isModal) return null;
@@ -112,7 +137,6 @@ export default function CreateBoardModal({
   return (
     <div className="fixed inset-0 bg-gray-500/50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg w-full max-w-[498px]">
-        {/* Header */}
         <div className="flex items-center justify-between px-4 h-[63px] border-b border-gray-300">
           <h4 className="text-base font-medium text-gray-900">
             {selectedBoard !== null ? "Update board" : "Create board"}
@@ -126,7 +150,6 @@ export default function CreateBoardModal({
         </div>
 
         <div className="px-4 py-4 pb-0">
-          {/* Background Images Section */}
           <div className="mb-4 pb-4 border-b border-gray-300">
             <h4 className="text-sm font-semibold mb-3 text-gray-900">
               Background
@@ -188,7 +211,6 @@ export default function CreateBoardModal({
             </div>
           </div>
 
-          {/* Board Title Section */}
           <div className="pb-4 border-b border-gray-300">
             <label className="text-sm font-semibold mb-2 block text-gray-900">
               Board title <span className="text-red-500">*</span>
