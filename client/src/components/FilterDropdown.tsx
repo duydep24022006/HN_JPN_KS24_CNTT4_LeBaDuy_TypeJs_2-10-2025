@@ -43,13 +43,10 @@ export default function FilterDropdown({
 
   const isDueNextDay = (dueDate: string | undefined) => {
     if (!dueDate) return false;
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(23, 59, 59, 999);
     const taskDate = new Date(dueDate);
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return taskDate >= today && taskDate <= tomorrow;
+    today.setHours(23, 59, 59, 999);
+    return taskDate > today;
   };
 
   const applyFilters = () => {

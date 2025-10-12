@@ -52,7 +52,6 @@ export default function TaskListBoard() {
   const [selectedList, setSelectedList] = useState<List | null>(null);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [editTag, setEditTag] = useState<Tags | null>(null);
-
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
   const [isFilterActive, setIsFilterActive] = useState(false);
 
