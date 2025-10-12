@@ -12,7 +12,7 @@ export const showError = (mess: string[]): void => {
             </div>
           </span>
           <div>
-            <p className="flex justify-between items-center font-semibold m-0">
+            <p className="flex justify-between items-center font-semibold m-0 w-55">
               Error
               <span>
                 <button
@@ -36,7 +36,7 @@ export const showError = (mess: string[]): void => {
 };
 
 export const showSuccess = (key: string) => {
-  toast.custom((t) => (
+  toast.custom(() => (
     <div className="w-72 bg-green-50 border border-green-200 rounded-lg shadow-md p-4 text-sm text-black flex items-center gap-2">
       <span className="text-green-600 text-lg">
         <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">

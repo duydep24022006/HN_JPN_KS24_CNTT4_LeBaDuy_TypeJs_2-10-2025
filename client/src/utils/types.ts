@@ -33,20 +33,26 @@ export interface List {
 
 // ---------------- TASK ----------------
 export interface Task {
-  id: number;
+  id?: number;
   listId: number;
   title: string;
   description: string;
   status: boolean;
   due_date: string;
-  created_at: string;
-  tags?: Tag[];
+  created_at?: string;
+  tags?: Tags[];
 }
 
 // ---------------- TAG ----------------
-export interface Tag {
-  id: number;
-  taskId: number;
-  content: string;
-  color: string;
+export interface Tags {
+  id?: number;
+  taskId?: number;
+  content?: string;
+  color?: string;
+}
+
+export interface ErrorState {
+  listTitle: string;
+  editTitle: string;
+  taskTitle: string;
 }

@@ -44,7 +44,6 @@ export default function Login() {
       newErrors.password = "Password không được để trống";
       hasError = true;
     }
-
     setErrors(newErrors);
 
     if (hasError) {

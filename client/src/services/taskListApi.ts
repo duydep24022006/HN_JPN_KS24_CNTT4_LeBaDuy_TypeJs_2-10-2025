@@ -1,10 +1,10 @@
 import axios from "axios";
-import type { List, Task } from "../utils/types";
+import type { Board, List, Task } from "../utils/types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getBoardWithAllData = createAsyncThunk<
-  { id: number; title: string; lists: List[] }, // return type
-  number // param type
+  { id: number; title: string; lists: List[] },
+  number
 >("board/getBoardWithAllData", async (boardId) => {
   try {
     const boardRes = await axios.get(
@@ -64,7 +64,47 @@ export const postList = createAsyncThunk(
     }
   }
 );
+export const deleteList = createAsyncThunk(
+  "tast/deleteList",
+  async (idList: number) => {
+    try {
+      const res = await axios.delete<List>(
+        `http://localhost:8080/lists/${idList}`
+      );
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const editList = createAsyncThunk(
+  "tast/editList",
+  async (editList: any) => {
+    try {
+      const res = await axios.patch<List>(
+        `http://localhost:8080/lists/${editList.id}`,
+        editList
+      );
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 
+export const getAllTask = createAsyncThunk(
+  "tast/getAllTask",
+  async (taskId: number): Promise<Task> => {
+    try {
+      const res = await axios.get<Task>(
+        `http://localhost:8080/tasks/${taskId}`
+      );
+      return res.data;
+    } catch (error) {
+      throw new Error("Không thể lấy dữ liệu task");
+    }
+  }
+);
 export const postTask = createAsyncThunk(
   "tast/postTask",
   async (newTast: Task) => {
@@ -80,13 +120,38 @@ export const postTask = createAsyncThunk(
   }
 );
 
+export const deleteTask = createAsyncThunk(
+  "tast/deleteTask",
+  async (id: number) => {
+    try {
+      const res = await axios.delete<Task>(`http://localhost:8080/tasks/${id}`);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 export const editTask = createAsyncThunk(
   "tast/editTask",
-  async (newTast: Task) => {
+  async (editTask: any) => {
     try {
       const res = await axios.patch<Task>(
-        `http://localhost:8080/tasks/${newTast.id}`,
-        newTast
+        `http://localhost:8080/tasks/${editTask.id}`,
+        editTask
+      );
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const edit_Board = createAsyncThunk(
+  "board/edit_Board",
+  async (newBoard: any) => {
+    try {
+      const res = await axios.patch<Board>(
+        `http://localhost:8080/boards/${newBoard.id}`,
+        newBoard
       );
       return res.data;
     } catch (error) {

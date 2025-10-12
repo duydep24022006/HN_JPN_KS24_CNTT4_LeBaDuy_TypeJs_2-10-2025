@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import { BarsOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
-import { getAllBoard } from "../services/boardApi";
+import { deleteBoard, getAllBoard } from "../services/boardApi";
 
 type ContextType = {
   onChangeToggle?: (board: Board | null) => void;
@@ -42,13 +42,25 @@ export default function EventBoard() {
     (item) => item.is_starred === true && item.is_close === false
   );
 
-  const confirm = async (key: string) => {
-    const result = await confirmNotification(key);
-    if (result) {
-      Swal.fire({
+  const confirm = async (key: string, boardId: number) => {
+    try {
+      const result = await confirmNotification(key);
+      if (!result) return;
+      await dispatch(deleteBoard(boardId)).unwrap();
+
+      dispatch(getAllBoard(currentUserId));
+
+      await Swal.fire({
         title: key,
-        text: `Your file has been deleted.${key}`,
+        text: `Your board has been deleted successfully.`,
         icon: "success",
+      });
+    } catch (err) {
+      console.error("Lỗi khi xóa board:", err);
+      Swal.fire({
+        title: "Error",
+        text: "Something went wrong while deleting the board.",
+        icon: "error",
       });
     }
   };
@@ -84,7 +96,7 @@ export default function EventBoard() {
               key={board.id}
               className={`relative rounded-[5px] overflow-hidden group cursor-pointer ${
                 isMobileView ? " w-[240px]" : "w-[270px]"
-              } h-[130px] active:scale-105 transition-transform duration-300`}
+              } h-[130px] hover:scale-105 transition-transform duration-300`}
             >
               {board.type === "image" ? (
                 <img
@@ -100,7 +112,6 @@ export default function EventBoard() {
               )}
 
               <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all z-0"></div>
-
               <div
                 className="absolute top-2.5 left-3 z-2"
                 onClick={() => TaskList(board.id)}
@@ -119,11 +130,11 @@ export default function EventBoard() {
                     Edit this board
                   </button>
                 </div>
-                <div
-                  className="absolute bottom-2.5 right-3 opacity-0 group-hover:!opacity-100 transition-opacity z-2"
-                  onClick={() => confirm("delete")}
-                >
-                  <button className="flex items-center gap-1 text-white text-xs bg-red-500 px-2 py-1 rounded">
+                <div className="absolute bottom-2.5 right-3 opacity-0 group-hover:!opacity-100 transition-opacity z-2">
+                  <button
+                    className="flex items-center gap-1 text-white text-xs bg-red-500 px-2 py-1 rounded"
+                    onClick={() => confirm("delete", Number(board.id))}
+                  >
                     <Trash size={12} />
                     Delete
                   </button>
@@ -159,7 +170,7 @@ export default function EventBoard() {
                 key={board.id}
                 className={`relative rounded-[5px] overflow-hidden group cursor-pointer ${
                   isMobileView ? " w-[240px]" : "w-[270px]"
-                } h-[130px]`}
+                } h-[130px] hover:scale-105 transition-transform duration-300`}
               >
                 {board.type === "image" ? (
                   <img
@@ -196,7 +207,7 @@ export default function EventBoard() {
                 </div>
                 <div
                   className="absolute bottom-2.5 right-3 opacity-0 group-hover:!opacity-100 transition-opacity z-2"
-                  onClick={() => confirm("delete")}
+                  onClick={() => confirm("delete", Number(board.id))}
                 >
                   <button className="flex items-center gap-1 text-white text-xs bg-red-500 px-2 py-1 rounded">
                     <Trash size={12} />

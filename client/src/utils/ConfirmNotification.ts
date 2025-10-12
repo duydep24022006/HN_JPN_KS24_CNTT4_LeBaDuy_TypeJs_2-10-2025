@@ -12,9 +12,3 @@ export const confirmNotification = async (key: string): Promise<boolean> => {
   });
   return result.isConfirmed;
 };
-
-// export function alertAuth(key: boolean) {
-//   // if (key) {
-//   // } else {
-//   // }
-// }

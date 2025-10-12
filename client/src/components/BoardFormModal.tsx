@@ -183,7 +183,6 @@ export default function CreateBoardModal({
             </div>
           </div>
 
-          {/* Color Section */}
           <div className="mb-4 pb-4 border-b border-gray-300">
             <h4 className="text-sm font-semibold mb-3 text-gray-900">Color</h4>
             <div className="grid grid-cols-6 gap-2">

@@ -6,7 +6,7 @@ import { confirmNotification } from "../utils/ConfirmNotification";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
-import { getAllBoard } from "../services/boardApi";
+import { deleteBoard, getAllBoard } from "../services/boardApi";
 type ContextType = {
   onChangeToggle?: (board: Board | null) => void;
 };
@@ -36,13 +36,25 @@ export default function ClosedBoards() {
 
   const closeBoards = ListBoards.filter((item) => item.is_close === true);
 
-  const confirm = async (key: string) => {
-    const result = await confirmNotification(key);
-    if (result) {
-      Swal.fire({
+  const confirm = async (key: string, boardId: number) => {
+    try {
+      const result = await confirmNotification(key);
+      if (!result) return;
+      await dispatch(deleteBoard(boardId)).unwrap();
+
+      dispatch(getAllBoard(currentUserId));
+
+      await Swal.fire({
         title: key,
-        text: `Your file has been deleted.${key}`,
+        text: `Your board has been deleted successfully.`,
         icon: "success",
+      });
+    } catch (err) {
+      console.error("Lỗi khi xóa board:", err);
+      Swal.fire({
+        title: "Error",
+        text: "Something went wrong while deleting the board.",
+        icon: "error",
       });
     }
   };
@@ -55,7 +67,7 @@ export default function ClosedBoards() {
             <div className="flex items-center gap-3 text-[#212529]">
               <SquareX className=" text-[32px]" size={32} />
               <h2 className="text-lg font-normal text-gray-900">
-                Your Workspaces
+                Closed Boards
               </h2>
             </div>
             <div className="flex items-center gap-2">
@@ -81,7 +93,7 @@ export default function ClosedBoards() {
                 key={board.id}
                 className={`relative rounded-[5px] overflow-hidden group cursor-pointer ${
                   isMobileView ? " w-[240px]" : "w-[270px]"
-                } h-[130px]`}
+                } h-[130px] hover:scale-105 transition-transform duration-300`}
               >
                 {board.type === "image" ? (
                   <img
@@ -118,7 +130,7 @@ export default function ClosedBoards() {
                 </div>
                 <div
                   className="absolute bottom-2.5 right-3 opacity-0 group-hover:!opacity-100 transition-opacity z-2"
-                  onClick={() => confirm("delete")}
+                  onClick={() => confirm("delete", Number(board.id))}
                 >
                   <button className="flex items-center gap-1 text-white text-xs bg-red-500 px-2 py-1 rounded">
                     <Trash size={12} />

@@ -20,6 +20,34 @@
       "username": "duy",
       "password": "12345678",
       "created_at": "2025-10-05T09:00:47.142Z"
+    },
+    {
+      "id": 94069915,
+      "email": "admin13@gmail.com",
+      "username": "1223",
+      "password": "12345678",
+      "created_at": "2025-10-09T04:27:59.406Z"
+    },
+    {
+      "id": 43018685,
+      "email": "duy@gmail.com",
+      "username": "duy",
+      "password": "12345678",
+      "created_at": "2025-10-09T07:03:04.301Z"
+    },
+    {
+      "id": 19988570,
+      "email": "admin@gmail.com",
+      "username": "sdsd",
+      "password": "Duy@12345",
+      "created_at": "2025-10-09T15:58:11.998Z"
+    },
+    {
+      "id": 62691166,
+      "email": "duy11111@gmail.com",
+      "username": "duy",
+      "password": "Duy1@gmail",
+      "created_at": "2025-10-12T14:11:16.269Z"
     }
   ],
   "boards": [
@@ -30,7 +58,7 @@
       "description": "Quản lý tiến độ dự án website",
       "backdrop": "linear-gradient(135deg, #00FF2F, #00FFC8)",
       "is_starred": true,
-      "is_close": false,
+      "is_close": true,
       "created_at": "2025-02-28T12:30:00Z",
       "type": "color"
     },
@@ -39,8 +67,8 @@
       "userId": 1,
       "title": "Dự án Webs11",
       "description": "Quản lý tiến độ dự án website",
-      "backdrop": "https://res.cloudinary.com/dytn1lbpl/image/upload/v1759734739/image_6_vvfo8r.jpg",
-      "is_starred": false,
+      "backdrop": "https://res.cloudinary.com/dytn1lbpl/image/upload/v1759734763/image_8_aouypf.jpg",
+      "is_starred": true,
       "is_close": false,
       "created_at": "2025-02-28T12:30:00Z",
       "type": "image"
@@ -57,118 +85,375 @@
       "type": "color"
     },
     {
-      "id": 82274965,
-      "title": "124",
-      "backdrop": "linear-gradient(135deg, #2609FF, #D20CFF)",
-      "userId": 1,
-      "type": "color",
-      "is_starred": false,
-      "is_close": false,
-      "description": "",
-      "created_at": "2025-10-07T21:27:48.227Z"
-    },
-    {
       "id": 76145664,
       "title": "12",
-      "backdrop": "linear-gradient(135deg, #00FFE5, #004BFA)",
+      "backdrop": "https://res.cloudinary.com/dytn1lbpl/image/upload/v1759734758/image_7_rmat4n.jpg",
+      "userId": 1,
+      "type": "image",
+      "is_starred": false,
+      "is_close": true,
+      "description": "",
+      "created_at": "2025-10-08T17:43:57.614Z"
+    },
+    {
+      "id": 95364558,
+      "title": "1234rt",
+      "backdrop": "linear-gradient(135deg, #FFA200,#EDFA00)",
+      "userId": 1,
+      "type": "color",
+      "is_starred": false,
+      "is_close": true,
+      "description": "",
+      "created_at": "2025-10-09T04:59:49.536Z"
+    },
+    {
+      "id": 8037185,
+      "title": "Spring",
+      "backdrop": "https://res.cloudinary.com/dytn1lbpl/image/upload/v1759734794/image_9_f9nmwq.jpg",
+      "userId": 1,
+      "type": "image",
+      "is_starred": true,
+      "is_close": false,
+      "description": "",
+      "created_at": "2025-10-10T06:13:30.803Z"
+    },
+    {
+      "id": 26353635,
+      "title": "12",
+      "backdrop": "linear-gradient(135deg, #FFA200,#EDFA00)",
       "userId": 1,
       "type": "color",
       "is_starred": false,
       "is_close": false,
       "description": "",
-      "created_at": "2025-10-08T17:43:57.614Z"
+      "created_at": "2025-10-10T07:13:32.635Z"
+    },
+    {
+      "id": 17504918,
+      "title": "sdfsd",
+      "backdrop": "linear-gradient(135deg, #00FFE5, #004BFA)",
+      "userId": 43018685,
+      "type": "color",
+      "is_starred": false,
+      "is_close": false,
+      "description": "",
+      "created_at": "2025-10-12T15:44:01.750Z"
     }
   ],
   "lists": [
     {
       "id": 201,
       "boardId": 102,
-      "title": "Việc cần làm",
+      "title": "ád",
       "created_at": "2025-02-28T13:00:00Z"
     },
     {
-      "id": 202,
+      "id": 85554916,
+      "title": "ADád",
       "boardId": 102,
-      "title": "Việc cần làm",
-      "created_at": "2025-02-28T13:00:00Z"
+      "created_at": "2025-10-09T17:03:08.555Z",
+      "tasks": []
     },
     {
-      "id": 203,
+      "id": 55571910,
+      "title": "ádfa",
       "boardId": 103,
-      "title": "Việc cần làm",
-      "created_at": "2025-02-28T13:00:00Z"
+      "created_at": "2025-10-09T18:02:35.557Z",
+      "tasks": []
     },
     {
-      "id": 63742325,
+      "id": 78803601,
+      "title": "ádfasdf",
+      "boardId": 101,
+      "created_at": "2025-10-09T18:02:37.880Z",
+      "tasks": []
+    },
+    {
+      "id": 30312489,
+      "title": "sadas",
+      "boardId": 26353635,
+      "created_at": "2025-10-10T07:40:13.031Z",
+      "tasks": []
+    },
+    {
+      "id": 18346674,
+      "title": "ÁDAS",
+      "boardId": 26353635,
+      "created_at": "2025-10-11T05:54:41.834Z",
+      "tasks": []
+    },
+    {
+      "id": 21459543,
+      "title": "àd",
+      "boardId": 101,
+      "created_at": "2025-10-11T11:57:32.145Z",
+      "tasks": []
+    },
+    {
+      "id": 44914114,
+      "title": "ãasasaas",
+      "boardId": 102,
+      "created_at": "2025-10-12T15:42:24.491Z"
+    },
+    {
+      "id": 75721372,
+      "title": "asa",
+      "boardId": 102,
+      "created_at": "2025-10-12T15:42:27.572Z"
+    },
+    {
+      "id": 88484071,
       "title": "ádf",
       "boardId": 102,
-      "created_at": "2025-10-08T21:12:56.374Z",
-      "tasks": []
+      "created_at": "2025-10-12T15:42:28.848Z"
     },
     {
-      "id": 4508670,
-      "title": "âsa",
+      "id": 4191733,
+      "title": "ádfa",
       "boardId": 102,
-      "created_at": "2025-10-08T21:18:20.450Z",
-      "tasks": []
+      "created_at": "2025-10-12T15:42:30.419Z"
+    },
+    {
+      "id": 47104921,
+      "title": "ádfaSDá",
+      "boardId": 26353635,
+      "created_at": "2025-10-12T15:42:44.710Z"
+    },
+    {
+      "id": 49894794,
+      "title": "ádfasd",
+      "boardId": 17504918,
+      "created_at": "2025-10-12T15:44:04.989Z"
+    },
+    {
+      "id": 68159130,
+      "title": "ádfasdfa",
+      "boardId": 17504918,
+      "created_at": "2025-10-12T15:44:06.815Z"
+    },
+    {
+      "id": 78495053,
+      "title": "àda",
+      "boardId": 17504918,
+      "created_at": "2025-10-12T15:44:07.849Z"
+    },
+    {
+      "id": 56564578,
+      "title": "zxcvsf",
+      "boardId": 17504918,
+      "created_at": "2025-10-12T15:44:45.656Z"
+    },
+    {
+      "id": 72177529,
+      "title": "á",
+      "boardId": 17504918,
+      "created_at": "2025-10-12T15:44:47.217Z"
+    },
+    {
+      "id": 86942123,
+      "title": "ádfasdf",
+      "boardId": 17504918,
+      "created_at": "2025-10-12T15:44:48.694Z"
+    },
+    {
+      "id": 89787275,
+      "title": "ádfas",
+      "boardId": 102,
+      "created_at": "2025-10-12T15:46:28.978Z"
+    },
+    {
+      "id": 6548842,
+      "title": "adfasdfasd",
+      "boardId": 102,
+      "created_at": "2025-10-12T15:46:30.654Z"
+    },
+    {
+      "id": 61912497,
+      "title": "ádfasdf",
+      "boardId": 102,
+      "created_at": "2025-10-12T15:46:36.191Z"
     }
   ],
   "tasks": [
     {
       "id": 301,
       "listId": 201,
-      "title": "Thiết kế giao diện",
-      "description": "Tạo wireframe cho trang chủ",
+      "title": "Thiết kế giao",
+      "description": "<p>mádsadfsdááadfứ</p>",
       "status": true,
-      "due_date": "2025-03-05T23:59:59Z",
-      "created_at": "2025-02-28T13:30:00Z"
+      "due_date": "2026-02-23T17:00:00.000Z",
+      "created_at": "2025-02-28T13:30:00Z",
+      "tags": [
+        {
+          "id": 30736391,
+          "taskId": 301,
+          "content": "ấdf",
+          "color": "#A7E9E5"
+        }
+      ]
     },
     {
-      "id": 302,
+      "id": 62953623,
       "listId": 201,
-      "title": "Thiết kế giao diện",
-      "description": "Tạo wireframe cho trang chủ",
+      "title": "ádf",
+      "due_date": "",
+      "description": "",
       "status": false,
-      "due_date": "2025-03-05T23:59:59Z",
-      "created_at": "2025-02-28T13:30:00Z"
+      "created_at": "2025-10-09T16:33:16.295Z",
+      "tags": []
     },
     {
-      "id": 302,
-      "listId": 202,
-      "title": "Thiết kế giao diện",
-      "description": "Tạo wireframe cho trang chủ",
+      "id": 23927732,
+      "listId": 201,
+      "title": "ádfasd",
+      "due_date": "",
+      "description": "<p>saEDSAD</p>",
       "status": false,
-      "due_date": "2025-03-05T23:59:59Z",
-      "created_at": "2025-02-28T13:30:00Z"
+      "created_at": "2025-10-09T16:33:22.392Z",
+      "tags": []
     },
     {
-      "id": 303,
-      "listId": 203,
-      "title": "Thiết kế giao diện",
-      "description": "Tạo wireframe cho trang chủ",
+      "id": 6791947,
+      "listId": 201,
+      "title": "ádfasdf",
+      "due_date": "",
+      "description": "",
       "status": false,
-      "due_date": "2025-03-05T23:59:59Z",
-      "created_at": "2025-02-28T13:30:00Z"
-    }
-  ],
-  "tags": [
-    {
-      "id": 401,
-      "taskId": 301,
-      "content": "Urgent",
-      "color": "#fff"
+      "created_at": "2025-10-09T17:05:20.679Z",
+      "tags": []
     },
     {
-      "id": 402,
-      "taskId": 302,
-      "content": "Urgent",
-      "color": "#fff"
+      "id": 28331757,
+      "listId": 201,
+      "title": "asdfasdf",
+      "due_date": "",
+      "description": "",
+      "status": false,
+      "created_at": "2025-10-09T17:05:22.833Z",
+      "tags": []
     },
     {
-      "id": 403,
-      "taskId": 303,
-      "content": "Urgent",
-      "color": "#fff"
+      "id": 72946542,
+      "listId": 85554916,
+      "title": "hvyg",
+      "due_date": "",
+      "description": "",
+      "status": false,
+      "created_at": "2025-10-09T17:36:07.294Z",
+      "tags": []
+    },
+    {
+      "id": 87115478,
+      "listId": 85554916,
+      "title": "kj l",
+      "due_date": "",
+      "description": "<p>quaw</p>",
+      "status": false,
+      "created_at": "2025-10-09T17:39:28.711Z",
+      "tags": []
+    },
+    {
+      "id": 26145402,
+      "listId": 55571910,
+      "title": "ASDAsd",
+      "due_date": "",
+      "description": "",
+      "status": false,
+      "created_at": "2025-10-09T19:42:42.614Z",
+      "tags": []
+    },
+    {
+      "id": 81579861,
+      "listId": 30312489,
+      "title": "asdas",
+      "due_date": "",
+      "description": "<p>sdas</p>",
+      "status": true,
+      "created_at": "2025-10-10T07:40:18.157Z",
+      "tags": []
+    },
+    {
+      "id": 1511409,
+      "listId": 47104921,
+      "title": "fasdf",
+      "due_date": "",
+      "description": "<p>sdas</p>",
+      "status": false,
+      "created_at": "2025-10-11T11:09:30.151Z",
+      "tags": []
+    },
+    {
+      "id": 16085919,
+      "listId": 30312489,
+      "title": "zxvzxcv",
+      "due_date": "",
+      "description": "<p>sdas</p>",
+      "status": false,
+      "created_at": "2025-10-11T11:31:01.608Z",
+      "tags": []
+    },
+    {
+      "id": 38202292,
+      "listId": 18346674,
+      "title": "zcvzxcv",
+      "due_date": "",
+      "description": "<p>ádasd</p>",
+      "status": false,
+      "created_at": "2025-10-11T11:31:03.820Z",
+      "tags": [
+        {
+          "id": 1,
+          "title": "Sửa lỗi giao diện",
+          "description": "Kiểm tra bug trên trang dashboard",
+          "listId": 1
+        },
+        {
+          "id": 2,
+          "title": "Thêm tính năng đăng nhập",
+          "description": "Sử dụng JWT để xác thực người dùng",
+          "listId": 1
+        }
+      ]
+    },
+    {
+      "id": 17494766,
+      "listId": 21459543,
+      "title": "ádf",
+      "due_date": "",
+      "description": "<figure class=\"image\"><img></figure><h2>&nbsp;</h2>",
+      "status": false,
+      "created_at": "2025-10-11T11:57:41.749Z",
+      "tags": []
+    },
+    {
+      "id": 24937821,
+      "listId": 78803601,
+      "title": "vsdfasdádfasdfasdfs",
+      "due_date": "",
+      "description": "<p>ấdfasdfasfádfasdf</p>",
+      "status": false,
+      "created_at": "2025-10-11T13:44:02.494Z",
+      "tags": []
+    },
+    {
+      "id": 51791092,
+      "listId": 78803601,
+      "title": "ádfasd",
+      "due_date": "",
+      "description": "<p>ấdfasdfasf</p>",
+      "status": false,
+      "created_at": "2025-10-11T13:45:05.179Z",
+      "tags": []
+    },
+    {
+      "id": 93884902,
+      "listId": 78803601,
+      "title": "ádfasd",
+      "due_date": "",
+      "description": "<p>ấdfasdfasfádfasdf</p>",
+      "status": false,
+      "created_at": "2025-10-11T13:45:09.388Z",
+      "tags": []
     }
   ]
 }

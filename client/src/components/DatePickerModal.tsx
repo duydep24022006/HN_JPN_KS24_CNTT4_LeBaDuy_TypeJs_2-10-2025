@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import type { Task } from "../utils/types";
 
 type DatePickerModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  currentTask: Task | null;
+  setCurrentTask: React.Dispatch<React.SetStateAction<Task | null>>;
 };
 
 type DayInfo = {
@@ -14,11 +17,37 @@ type DayInfo = {
 
 type SelectingDate = "start" | "due";
 
-export function DatePickerModal({ isOpen, onClose }: DatePickerModalProps) {
-  const [currentMonth, setCurrentMonth] = useState<Date>(new Date(2025, 2));
-  const [startDate, setStartDate] = useState<Date | null>(new Date(2025, 2, 1));
+export function DatePickerModal({
+  isOpen,
+  onClose,
+  currentTask,
+  setCurrentTask,
+}: DatePickerModalProps) {
+  const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
+  const [startDate, setStartDate] = useState<Date | null>(null);
   const [dueDate, setDueDate] = useState<Date | null>(null);
   const [selectingDate, setSelectingDate] = useState<SelectingDate>("start");
+
+  useEffect(() => {
+    if (isOpen && currentTask) {
+      // Chỉ set initial value khi mở modal lần đầu
+      if (currentTask.created_at) {
+        const date = new Date(currentTask.created_at);
+        setStartDate(date);
+      } else {
+        setStartDate(new Date()); // Mặc định là hôm nay nếu chưa có
+      }
+
+      if (currentTask.due_date) {
+        const date = new Date(currentTask.due_date);
+        setDueDate(date);
+      } else {
+        setDueDate(new Date());
+      }
+
+      setSelectingDate("due"); // Mặc định chọn due date
+    }
+  }, [isOpen]); // Chỉ depend vào isOpen, không depend vào currentTask
 
   const monthNames: string[] = [
     "January",
@@ -88,9 +117,13 @@ export function DatePickerModal({ isOpen, onClose }: DatePickerModalProps) {
   };
 
   const isSelectedDate = (date: Date): boolean => {
-    return selectingDate === "start"
-      ? startDate?.toDateString() === date.toDateString()
-      : dueDate?.toDateString() === date.toDateString();
+    if (selectingDate === "start" && startDate) {
+      return startDate.toDateString() === date.toDateString();
+    }
+    if (selectingDate === "due" && dueDate) {
+      return dueDate.toDateString() === date.toDateString();
+    }
+    return false;
   };
 
   const handlePrevMonth = (): void => {
@@ -106,20 +139,53 @@ export function DatePickerModal({ isOpen, onClose }: DatePickerModalProps) {
   };
 
   const handleDateClick = (date: Date): void => {
+    const selectedDate = new Date(date);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      return;
+    }
+
     if (selectingDate === "start") {
       setStartDate(date);
+      if (dueDate) {
+        const compareDueDate = new Date(dueDate);
+        compareDueDate.setHours(0, 0, 0, 0);
+        if (compareDueDate < selectedDate) {
+          setDueDate(null);
+        }
+      }
     } else {
-      setDueDate(date);
+      if (startDate) {
+        const compareStartDate = new Date(startDate);
+        compareStartDate.setHours(0, 0, 0, 0);
+
+        if (selectedDate >= compareStartDate) {
+          setDueDate(date);
+        } else {
+        }
+      } else {
+        setDueDate(date);
+      }
     }
   };
 
   const handleSave = (): void => {
-    // onSave?.(startDate, dueDate);
-    // onClose();
+    const formattedStartDate = startDate ? startDate.toISOString() : null;
+    const formattedDueDate = dueDate ? dueDate.toISOString() : null;
+
+    setCurrentTask((prev: any) => ({
+      ...prev,
+      due_date: formattedDueDate,
+    }));
+
+    onClose();
   };
 
   const handleRemove = (): void => {
-    setStartDate(null);
     setDueDate(null);
   };
 
@@ -161,7 +227,6 @@ export function DatePickerModal({ isOpen, onClose }: DatePickerModalProps) {
             </button>
           </div>
 
-          {/* Days of Week */}
           <div className="grid grid-cols-7 gap-0.5 mb-1">
             {daysOfWeek.map((day: string) => (
               <div
@@ -173,34 +238,56 @@ export function DatePickerModal({ isOpen, onClose }: DatePickerModalProps) {
             ))}
           </div>
 
-          {/* Days */}
           <div className="grid grid-cols-7 gap-0.5 mb-3">
-            {days.map((dayInfo: DayInfo, index: number) => (
-              <button
-                key={index}
-                onClick={() =>
-                  dayInfo.isCurrentMonth && handleDateClick(dayInfo.date)
-                }
-                disabled={!dayInfo.isCurrentMonth}
-                className={`
-                  h-7 flex items-center justify-center text-xs rounded
-                  ${!dayInfo.isCurrentMonth ? "text-gray-300" : "text-gray-700"}
-                  ${
-                    isSelectedDate(dayInfo.date)
-                      ? "bg-blue-600 text-white font-semibold"
-                      : "hover:bg-gray-100"
-                  }
-                  ${
-                    dayInfo.isCurrentMonth ? "cursor-pointer" : "cursor-default"
-                  }
-                `}
-              >
-                {dayInfo.day}
-              </button>
-            ))}
+            {days.map((dayInfo: DayInfo, index: number) => {
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+
+              const currentDate = new Date(dayInfo.date);
+              currentDate.setHours(0, 0, 0, 0);
+
+              const isBeforeToday = currentDate < today;
+
+              let isBeforeStartDate = false;
+              if (selectingDate === "due" && startDate) {
+                const compareStartDate = new Date(startDate);
+                compareStartDate.setHours(0, 0, 0, 0);
+                isBeforeStartDate = currentDate < compareStartDate;
+              }
+
+              const isDisabled =
+                !dayInfo.isCurrentMonth || isBeforeToday || isBeforeStartDate;
+
+              return (
+                <button
+                  key={index}
+                  onClick={() => !isDisabled && handleDateClick(dayInfo.date)}
+                  disabled={isDisabled}
+                  className={`
+                    h-7 flex items-center justify-center text-xs rounded
+                    ${
+                      !dayInfo.isCurrentMonth ||
+                      isBeforeToday ||
+                      isBeforeStartDate
+                        ? "text-gray-300"
+                        : "text-gray-700"
+                    }
+                    ${
+                      isSelectedDate(dayInfo.date)
+                        ? "bg-blue-600 text-white font-semibold"
+                        : !isDisabled
+                        ? "hover:bg-gray-100"
+                        : ""
+                    }
+                    ${!isDisabled ? "cursor-pointer" : "cursor-not-allowed"}
+                  `}
+                >
+                  {dayInfo.day}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Start Date */}
           <div className="mb-3">
             <label className="block text-xs font-semibold text-gray-700 mb-1">
               Start date
@@ -208,32 +295,20 @@ export function DatePickerModal({ isOpen, onClose }: DatePickerModalProps) {
             <div className="flex items-center gap-1">
               <input
                 type="checkbox"
-                checked={startDate !== null}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (!e.target.checked) {
-                    setStartDate(null);
-                  } else {
-                    setStartDate(new Date());
-                  }
-                }}
-                className="w-3 h-3 text-blue-600 rounded"
+                checked={true}
+                disabled
+                className="w-3 h-3 text-blue-600 rounded opacity-50 cursor-not-allowed"
               />
               <input
                 type="text"
                 value={formatDate(startDate)}
                 readOnly
-                onClick={() => setSelectingDate("start")}
                 placeholder="M/D/YYYY"
-                className={`flex-1 px-2 py-1 border rounded focus:outline-none focus:ring-1 text-xs cursor-pointer ${
-                  selectingDate === "start"
-                    ? "border-blue-500 ring-1 ring-blue-500"
-                    : "border-gray-300"
-                }`}
+                className="flex-1 px-2 py-1 border border-gray-300 rounded text-xs bg-gray-50 cursor-not-allowed"
               />
             </div>
           </div>
 
-          {/* Due Date */}
           <div className="mb-3">
             <label className="block text-xs font-semibold text-gray-700 mb-1">
               Due date
@@ -244,7 +319,11 @@ export function DatePickerModal({ isOpen, onClose }: DatePickerModalProps) {
                 checked={dueDate !== null}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   if (e.target.checked) {
-                    setDueDate(new Date());
+                    const newDate =
+                      startDate && new Date(startDate) > new Date()
+                        ? new Date(startDate)
+                        : new Date();
+                    setDueDate(newDate);
                     setSelectingDate("due");
                   } else {
                     setDueDate(null);
@@ -257,7 +336,13 @@ export function DatePickerModal({ isOpen, onClose }: DatePickerModalProps) {
                 value={formatDate(dueDate)}
                 readOnly
                 onClick={() => {
-                  if (!dueDate) setDueDate(new Date());
+                  if (!dueDate) {
+                    const newDate =
+                      startDate && new Date(startDate) > new Date()
+                        ? new Date(startDate)
+                        : new Date();
+                    setDueDate(newDate);
+                  }
                   setSelectingDate("due");
                 }}
                 placeholder="M/D/YYYY"
@@ -270,7 +355,6 @@ export function DatePickerModal({ isOpen, onClose }: DatePickerModalProps) {
             </div>
           </div>
 
-          {/* Buttons */}
           <div className="space-y-1.5">
             <button
               onClick={handleSave}

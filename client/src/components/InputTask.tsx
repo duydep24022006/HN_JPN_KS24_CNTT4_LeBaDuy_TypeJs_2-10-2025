@@ -48,6 +48,7 @@ import {
 } from "ckeditor5";
 
 import "ckeditor5/ckeditor5.css";
+import type { Task } from "../utils/types";
 
 const LICENSE_KEY =
   "eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NjEwMDQ3OTksImp0aSI6IjllNWMzOTE1LWJkOTQtNGIxMS1iYjQ1LTg5YmJhMmZkZWY4ZSIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6IjI0NTg3NDBiIn0.HqBUl_OO_IsYX_wBHBy5BYXaYg-ycNELFHsSmzCMCyQBZVVEazC8QQvLxxaDSHlW7--M3O3sbam7Hiwc7tFF4A";
@@ -111,16 +112,32 @@ interface EditorConfigType {
   [key: string]: any;
 }
 
-export default function InputTask() {
+type Props = {
+  onChangeDescription?: (value: string) => void;
+  taskDescription: string | undefined;
+};
+
+export default function InputTask({
+  onChangeDescription,
+  taskDescription,
+}: Props) {
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const [isLayoutReady, setIsLayoutReady] = useState(false);
+  const [value, setValue] = useState(taskDescription || "");
 
   useEffect(() => {
     setIsLayoutReady(true);
 
     return () => setIsLayoutReady(false);
   }, []);
+
+  // Cập nhật value khi taskDescription thay đổi
+  useEffect(() => {
+    if (taskDescription !== undefined) {
+      setValue(taskDescription);
+    }
+  }, [taskDescription]);
 
   const { editorConfig } = useMemo(() => {
     if (!isLayoutReady) {
@@ -305,7 +322,6 @@ export default function InputTask() {
           ],
         },
         placeholder: "Type or paste your content here!",
-        initialData: "anh yêu em",
         table: {
           contentToolbar: [
             "tableColumn",
@@ -341,7 +357,18 @@ export default function InputTask() {
         <div ref={editorContainerRef}>
           <div ref={editorRef}>
             {editorConfig && (
-              <CKEditor editor={ClassicEditor} config={editorConfig} />
+              <CKEditor
+                editor={ClassicEditor}
+                config={editorConfig}
+                data={value}
+                onChange={(_, editor) => {
+                  const data = editor.getData();
+                  setValue(data);
+                  if (onChangeDescription) {
+                    onChangeDescription(data);
+                  }
+                }}
+              />
             )}
           </div>
         </div>

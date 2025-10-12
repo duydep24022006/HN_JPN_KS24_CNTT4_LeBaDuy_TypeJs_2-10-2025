@@ -12,11 +12,11 @@ import type { User } from "../../utils/types";
 export default function SignUp() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-
   const [formData, setFormData] = useState({
     email: "",
     user: "",
     password: "",
+    confirmPassword: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +29,6 @@ export default function SignUp() {
 
   const validate = () => {
     const errorArr: string[] = [];
-
     if (!formData.email.trim()) {
       errorArr.push("Email không được để trống");
     } else if (
@@ -37,7 +36,6 @@ export default function SignUp() {
     ) {
       errorArr.push("Email không hợp lệ");
     }
-
     if (!formData.user.trim()) {
       errorArr.push("Username không được để trống");
     } else if (formData.user.length < 3) {
@@ -46,14 +44,31 @@ export default function SignUp() {
 
     if (!formData.password.trim()) {
       errorArr.push("Password không được để trống");
-    } else if (formData.password.length < 8) {
-      errorArr.push("Password phải từ 8 ký tự trở lên");
+    } else {
+      if (formData.password.trim().length < 8) {
+        errorArr.push("Password phải có ít nhất 8 ký tự");
+      } else {
+        const strongPasswordRegex =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#_-])[A-Za-z\d@$!%*?&^#_-]{8,}$/;
+        if (!strongPasswordRegex.test(formData.password)) {
+          errorArr.push(
+            "Password phải bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt"
+          );
+        }
+      }
+    }
+
+    if (!formData.confirmPassword.trim()) {
+      errorArr.push("Confirm password không được để trống");
+    } else if (formData.password !== formData.confirmPassword) {
+      errorArr.push("Mật khẩu xác nhận không khớp");
     }
 
     if (errorArr.length > 0) {
       showError(errorArr);
       return false;
     }
+
     return true;
   };
 
@@ -86,7 +101,7 @@ export default function SignUp() {
 
   return (
     <div className="h-screen w-screen bg-[#ffffff] flex justify-center items-center">
-      <div className="h-[441.14px] w-[298px] ">
+      <div className="h-auto w-[298px]">
         <div className="flex justify-center items-center mb-[24px]">
           <img src={AuthTrello} alt="Logo" width={150} height={42.55} />
         </div>
@@ -114,11 +129,19 @@ export default function SignUp() {
             value={formData.password}
             placeholder="Password"
             onChange={handleChange}
+            className="border-1 border-[#DEE2E6] w-[296px] h-[56px] pl-[13px] placeholder-black text-black font-normal"
+          />
+          <input
+            type="password"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            placeholder="Confirm password"
+            onChange={handleChange}
             className="mb-2 border-1 border-[#DEE2E6] rounded-[6px] rounded-t-none w-[296px] h-[56px] pl-[13px] placeholder-black text-black font-normal"
           />
           <p>
             Already have an account,
-            <NavLink to={"/login"} className="ml-1.5  cursor-pointer">
+            <NavLink to={"/login"} className="ml-1.5 cursor-pointer">
               click here !
             </NavLink>
           </p>
@@ -126,7 +149,7 @@ export default function SignUp() {
             Sign up
           </Button>
         </form>
-        <div className=" font-normal text-base  tracking-normal align-middle text-[rgba(33,37,41,0.75)]">
+        <div className="font-normal text-base tracking-normal align-middle text-[rgba(33,37,41,0.75)]">
           © 2025 - Rikkei Education
         </div>
       </div>

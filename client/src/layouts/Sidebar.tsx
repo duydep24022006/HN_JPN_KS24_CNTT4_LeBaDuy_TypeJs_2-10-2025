@@ -27,8 +27,9 @@ export default function Sidebar({
   const show = isSiderbar;
   const [isMobileView, setIsMobileView] = useState(false);
   const [activeButton, setActiveButton] = useState<string>(lastPath || "");
-  const ListBoards = useSelector((data: RootState) => data.boardSlice.boards);
+  const ListBoard = useSelector((data: RootState) => data.boardSlice.boards);
   const { id } = useParams();
+  const ListBoards = ListBoard.filter((item) => item.is_close === false);
   useEffect(() => {
     const checkWidth = () => {
       setIsMobileView(window.innerWidth <= 576);
@@ -92,7 +93,6 @@ export default function Sidebar({
                 <span className="text-sm">Boards</span>
               </button>
 
-              {/* Starred Boards */}
               <button
                 onClick={() => handleActive("/starboards")}
                 className={`w-full flex items-center gap-2 px-2 py-1.5 rounded font-medium cursor-pointer transition-all
@@ -106,7 +106,6 @@ export default function Sidebar({
                 <span className="text-sm">Starred Boards</span>
               </button>
 
-              {/* Closed Boards */}
               <button
                 onClick={() => handleActive("/closeboards")}
                 className={`w-full flex items-center gap-2 px-2 py-1.5 rounded font-medium cursor-pointer transition-all
@@ -174,7 +173,7 @@ export default function Sidebar({
               </button>
 
               <button className="w-full flex items-center gap-2 px-2 py-1.5 text-blue-600 hover:bg-gray-50 rounded cursor-pointer">
-                <DoorClosed className="w-4 h-4" />
+                <DoorClosed className="w-4 h-4 " />
                 <span className="text-sm">Sign out</span>
               </button>
             </div>
@@ -189,7 +188,6 @@ export default function Sidebar({
       {!isMobileView && (
         <div className="w-60 h-[calc(100vh-48px)]">{sidebarContent}</div>
       )}
-
       {isMobileView && show && (
         <>
           <div

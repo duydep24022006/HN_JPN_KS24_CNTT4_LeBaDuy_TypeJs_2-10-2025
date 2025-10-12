@@ -14,7 +14,7 @@ export const getUser = createAsyncThunk<
     if (res.data.length > 0) {
       return res.data[0];
     } else {
-      return rejectWithValue("Sai email hoặc mật khẩu");
+      return rejectWithValue("");
     }
   } catch (error) {
     return rejectWithValue("Lỗi server" + error);

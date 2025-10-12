@@ -44,3 +44,17 @@ export const editBoard = createAsyncThunk(
     }
   }
 );
+
+export const deleteBoard = createAsyncThunk(
+  "board/deleteBoard",
+  async (id: number) => {
+    try {
+      const res = await axios.delete<Board>(
+        `http://localhost:8080/boards/${id}`
+      );
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);

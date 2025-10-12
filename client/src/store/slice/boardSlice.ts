@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { Board } from "../../utils/types";
-import { editBoard, getAllBoard, postBoard } from "../../services/boardApi";
+import {
+  deleteBoard,
+  editBoard,
+  getAllBoard,
+  postBoard,
+} from "../../services/boardApi";
 
 interface BoardState {
   boards: Board[];
@@ -50,14 +55,29 @@ const boardSlice = createSlice({
       .addCase(editBoard.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-
         const updatedBoard = action.payload;
         if (!updatedBoard) return;
-
         const board = state.boards.find((b) => b.id === updatedBoard.id);
         if (board) {
           Object.assign(board, updatedBoard);
         }
+      })
+      .addCase(deleteBoard.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteBoard.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        if (state.boards) {
+          state.boards = state.boards.filter(
+            (item) => item.id !== action.payload?.id
+          );
+        }
+      })
+      .addCase(deleteBoard.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
