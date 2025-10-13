@@ -34,8 +34,6 @@ export default function FormTask({
   currentList,
   currentTask,
 }: Props) {
-  console.log(currentTask);
-
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -87,7 +85,6 @@ export default function FormTask({
       ...prev,
       title: trimmedTitle,
     }));
-    console.log(currentTask);
 
     setError((prev) => ({
       ...prev,
@@ -132,7 +129,6 @@ export default function FormTask({
   };
 
   const handleSave = () => {
-    console.log(111, changeDescription);
     if (!changeDescription.trim()) {
       setDescriptionError("Không được bỏ trống");
       return;
@@ -173,7 +169,7 @@ export default function FormTask({
           <div className="flex items-start gap-3">
             <div className="flex-1">
               <div className="flex items-center gap-2 cursor-pointer">
-                {isCompleted ? (
+                {isCompleted === true ? (
                   <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
                     <Check
                       size={18}
@@ -258,9 +254,7 @@ export default function FormTask({
             </div>
 
             {descriptionError && (
-              <p className="text-red-500 text-xs mt-1 ml-7">
-                {descriptionError}
-              </p>
+              <p className="text-red-500  mt-1 ml-7">{descriptionError}</p>
             )}
 
             <div className="flex gap-2 ml-7 mt-3">

@@ -36,7 +36,6 @@ export default function MoveCard({
       ...currentTask,
       listId: selectedListId,
     };
-
     setSelectedTask(taskToMove);
 
     const newList = lists.find((l) => l.id === selectedListId);

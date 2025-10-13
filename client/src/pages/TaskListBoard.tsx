@@ -189,6 +189,7 @@ export default function TaskListBoard() {
       title: editListTitle,
     };
     dispatch(editList(editlist));
+    dispatch(getBoardWithAllData(Number(id)));
     resetAllInputs();
   };
 
@@ -423,7 +424,7 @@ export default function TaskListBoard() {
                   >
                     <Plus size={14} />
                     <span className="font-medium text-[14px] text-[#44546F] leading-[20px] tracking-[0px] text-center">
-                      Add a card
+                      <button> Add a card</button>
                     </span>
                   </button>
                   <img

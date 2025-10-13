@@ -132,10 +132,9 @@ export default function InputTask({
     return () => setIsLayoutReady(false);
   }, []);
 
-  // Cập nhật value khi taskDescription thay đổi
   useEffect(() => {
-    if (taskDescription !== undefined) {
-      setValue(taskDescription);
+    if (taskDescription !== undefined && onChangeDescription) {
+      onChangeDescription(taskDescription);
     }
   }, [taskDescription]);
 

@@ -134,6 +134,7 @@ export default function Sidebar({
                   onClick={() => {
                     onChangModal?.(null);
                   }}
+                  className="cursor-pointer "
                 />
               </div>
               {ListBoards && ListBoards.length > 0 ? (
