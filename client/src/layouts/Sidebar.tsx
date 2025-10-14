@@ -7,6 +7,8 @@ import type { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllBoard } from "../services/boardApi";
 import type { Board } from "../utils/types";
+import { confirmNotification } from "../utils/ConfirmNotification";
+import Swal from "sweetalert2";
 
 type Props = {
   onChangeSiderbar: (key: boolean) => void;
@@ -30,6 +32,7 @@ export default function Sidebar({
   const ListBoard = useSelector((data: RootState) => data.boardSlice.boards);
   const { id } = useParams();
   const ListBoards = ListBoard.filter((item) => item.is_close === false);
+
   useEffect(() => {
     const checkWidth = () => {
       setIsMobileView(window.innerWidth <= 576);
@@ -50,6 +53,18 @@ export default function Sidebar({
       navigate(`/dashboard`);
     } else {
       navigate(`/dashboard${buttonName}`);
+    }
+  };
+  const signOut = async (key: string) => {
+    const result = await confirmNotification(key);
+    if (result) {
+      localStorage.removeItem("currentUserId");
+      navigate(`/login`);
+      Swal.fire({
+        title: key,
+        text: `Your file has been deleted.`,
+        icon: "success",
+      });
     }
   };
 
@@ -79,12 +94,11 @@ export default function Sidebar({
             </p>
 
             <div className="space-y-0.5">
-              {/* Boards */}
               <button
-                onClick={() => handleActive("/dashboard")}
+                onClick={() => handleActive("/eventboard")}
                 className={`w-full flex items-center gap-2 px-2 py-1.5 rounded font-medium cursor-pointer transition-all
                   ${
-                    activeButton === "/dashboard"
+                    activeButton === "/eventboard"
                       ? "bg-blue-100 text-blue-700"
                       : "text-blue-600 hover:bg-gray-50"
                   }`}
@@ -144,7 +158,9 @@ export default function Sidebar({
                     onClick={() =>
                       navigate(`/dashboard/eventboard/tasklist/${board.id}`)
                     }
-                    className="w-full flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 rounded cursor-pointer transition-colors text-left"
+                    className={`w-full flex items-center gap-2 px-2 py-1.5  ${
+                      lastPath == board.id ? "bg-gray-200" : ""
+                    } hover:bg-gray-300 rounded cursor-pointer transition-colors text-left`}
                   >
                     <div
                       className="w-8 h-6 rounded flex-shrink-0"
@@ -173,7 +189,10 @@ export default function Sidebar({
                 <span className="text-sm">Settings</span>
               </button>
 
-              <button className="w-full flex items-center gap-2 px-2 py-1.5 text-blue-600 hover:bg-gray-50 rounded cursor-pointer">
+              <button
+                className="w-full flex items-center gap-2 px-2 py-1.5 text-blue-600 hover:bg-gray-50 rounded cursor-pointer"
+                onClick={() => signOut("Sign Out")}
+              >
                 <DoorClosed className="w-4 h-4 " />
                 <span className="text-sm">Sign out</span>
               </button>

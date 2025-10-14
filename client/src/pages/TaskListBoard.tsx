@@ -28,10 +28,11 @@ import {
   deleteList,
   edit_Board,
   editList,
-  getAllTask,
+  getTask,
   getBoardWithAllData,
   postList,
   postTask,
+  getAllTask,
 } from "../services/taskListApi";
 
 export default function TaskListBoard() {
@@ -54,11 +55,12 @@ export default function TaskListBoard() {
   const [editTag, setEditTag] = useState<Tags | null>(null);
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
   const [isFilterActive, setIsFilterActive] = useState(false);
-
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
   const boardState = useSelector((state: RootState) => state.listSlice);
+
   const board = boardState.board;
+  const tasks: Task[] | [] = boardState.tasks;
 
   const lists: List[] = board?.lists || [];
 
@@ -92,6 +94,13 @@ export default function TaskListBoard() {
   };
 
   useEffect(() => {
+    if (id) {
+      dispatch(getBoardWithAllData(Number(id)));
+      dispatch(getAllTask());
+    }
+  }, [dispatch, id]);
+
+  useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (!target.closest("input") && !target.closest("button")) {
@@ -110,12 +119,6 @@ export default function TaskListBoard() {
     window.addEventListener("resize", checkWidth);
     return () => window.removeEventListener("resize", checkWidth);
   }, []);
-
-  useEffect(() => {
-    if (id) {
-      dispatch(getBoardWithAllData(Number(id)));
-    }
-  }, [dispatch, id]);
 
   const confirmDeleteList = async (key: string, listId: number) => {
     const result = await confirmNotification(key);
@@ -195,7 +198,7 @@ export default function TaskListBoard() {
 
   const handleOpenFormTask = async (list: List, task: Task) => {
     try {
-      const res = await dispatch(getAllTask(Number(task.id))).unwrap();
+      const res = await dispatch(getTask(Number(task.id))).unwrap();
       setSelectedTask(res);
       setIsShowFormTask(true);
       setSelectedList(list);
@@ -424,7 +427,7 @@ export default function TaskListBoard() {
                   >
                     <Plus size={14} />
                     <span className="font-medium text-[14px] text-[#44546F] leading-[20px] tracking-[0px] text-center">
-                      <button> Add a card</button>
+                      Add a card
                     </span>
                   </button>
                   <img
@@ -516,6 +519,7 @@ export default function TaskListBoard() {
         setCurrentTask={setSelectedTask}
         currentTask={selectedTask}
       />
+
       <FormTask
         isShowFormTask={isShowFormTask}
         onClose={() => setIsShowFormTask(false)}

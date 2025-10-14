@@ -21,6 +21,7 @@ export default function Labels({
   const labels = [...(currentTask?.tags || [])];
 
   if (!isOpenModal) return <></>;
+
   return (
     <div className="w-full h-full fixed z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-lg shadow-xl" style={{ width: "304px" }}>
@@ -42,31 +43,35 @@ export default function Labels({
           </p>
 
           <div className="max-h-[200px] overflow-y-auto space-y-1">
-            {labels.map((label) => (
-              <div key={label.id} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  className="w-4 h-4 rounded border-gray-300 cursor-pointer"
-                />
-                <div
-                  style={{ backgroundColor: label.color }}
-                  className="flex-1 px-3 py-2 rounded text-sm font-medium text-gray-800"
-                >
-                  {label.content}
+            {labels.length > 0 ? (
+              labels.map((label) => (
+                <div key={label.id} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="w-4 h-4 rounded border-gray-300 cursor-pointer"
+                  />
+                  <div
+                    style={{ backgroundColor: label.color }}
+                    className="flex-1 px-3 py-2 rounded text-sm font-medium text-gray-800"
+                  >
+                    {label.content}
+                  </div>
+                  <button
+                    className="p-1.5 hover:bg-gray-100 rounded"
+                    onClick={() => {
+                      setEditTag(label);
+                      requestAnimationFrame(() => {
+                        onShowLabelModal();
+                      });
+                    }}
+                  >
+                    <Pencil className="w-4 h-4 text-gray-600 " />
+                  </button>
                 </div>
-                <button
-                  className="p-1.5 hover:bg-gray-100 rounded"
-                  onClick={() => {
-                    setEditTag(label);
-                    requestAnimationFrame(() => {
-                      onShowLabelModal();
-                    });
-                  }}
-                >
-                  <Pencil className="w-4 h-4 text-gray-600" />
-                </button>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className=" text-center text-gray-600 ">label ko có dữ liệu</p>
+            )}
           </div>
 
           <button

@@ -42,7 +42,6 @@ export default function FormTask({
   );
   const [isCompleted, setIsCompleted] = useState(currentTask?.status);
   const [changeDescription, setDescription] = useState("");
-  const [descriptionError, setDescriptionError] = useState("");
   const [error, setError] = useState({
     title: "",
   });
@@ -123,17 +122,9 @@ export default function FormTask({
 
   const handleDescriptionChange = (value: string) => {
     setDescription(value);
-    if (descriptionError) {
-      setDescriptionError("");
-    }
   };
 
   const handleSave = () => {
-    if (!changeDescription.trim()) {
-      setDescriptionError("Không được bỏ trống");
-      return;
-    }
-
     const newTask: any = {
       ...currentTask,
       description: changeDescription.trim(),
@@ -142,7 +133,6 @@ export default function FormTask({
     dispatch(editTask(newTask))
       .unwrap()
       .then(() => {
-        setDescriptionError("");
         onClose();
         dispatch(getBoardWithAllData(Number(id)));
       })
@@ -155,7 +145,6 @@ export default function FormTask({
     setError({
       title: "",
     });
-    setDescriptionError("");
     setIsEditingTitle(false);
     onClose();
   };
@@ -169,7 +158,7 @@ export default function FormTask({
           <div className="flex items-start gap-3">
             <div className="flex-1">
               <div className="flex items-center gap-2 cursor-pointer">
-                {isCompleted === true ? (
+                {currentTask?.status === true ? (
                   <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
                     <Check
                       size={18}
@@ -252,10 +241,6 @@ export default function FormTask({
                 taskDescription={currentTask?.description}
               />
             </div>
-
-            {descriptionError && (
-              <p className="text-red-500  mt-1 ml-7">{descriptionError}</p>
-            )}
 
             <div className="flex gap-2 ml-7 mt-3">
               <button

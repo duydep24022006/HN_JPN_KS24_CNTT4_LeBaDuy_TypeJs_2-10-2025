@@ -92,8 +92,8 @@ export const editList = createAsyncThunk(
   }
 );
 
-export const getAllTask = createAsyncThunk(
-  "tast/getAllTask",
+export const getTask = createAsyncThunk(
+  "tast/getTask",
   async (taskId: number): Promise<Task> => {
     try {
       const res = await axios.get<Task>(
@@ -105,6 +105,21 @@ export const getAllTask = createAsyncThunk(
     }
   }
 );
+export const getAllTask = createAsyncThunk("task/getAllTask", async () => {
+  try {
+    const res = await axios.get<Task[]>("http://localhost:8080/tasks");
+
+    const tasksWithTags = res.data.map((task) => ({
+      ...task,
+      tags: task.tags || [],
+    }));
+
+    return tasksWithTags;
+  } catch (error) {
+    console.error("Không thể lấy toàn bộ task:", error);
+    throw error;
+  }
+});
 export const postTask = createAsyncThunk(
   "tast/postTask",
   async (newTast: Task) => {

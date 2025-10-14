@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import {
   ClassicEditor,
@@ -48,7 +48,6 @@ import {
 } from "ckeditor5";
 
 import "ckeditor5/ckeditor5.css";
-import type { Task } from "../utils/types";
 
 const LICENSE_KEY =
   "eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NjEwMDQ3OTksImp0aSI6IjllNWMzOTE1LWJkOTQtNGIxMS1iYjQ1LTg5YmJhMmZkZWY4ZSIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6IjI0NTg3NDBiIn0.HqBUl_OO_IsYX_wBHBy5BYXaYg-ycNELFHsSmzCMCyQBZVVEazC8QQvLxxaDSHlW7--M3O3sbam7Hiwc7tFF4A";
@@ -117,10 +116,7 @@ type Props = {
   taskDescription: string | undefined;
 };
 
-export default function InputTask({
-  onChangeDescription,
-  taskDescription,
-}: Props) {
+function InputTask({ onChangeDescription, taskDescription }: Props) {
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const [isLayoutReady, setIsLayoutReady] = useState(false);
@@ -424,3 +420,4 @@ function configUpdateAlert(config: EditorConfigType): void {
     );
   }
 }
+export default React.memo(InputTask);

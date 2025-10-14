@@ -5,16 +5,19 @@ import {
   edit_Board,
   editList,
   editTask,
-  getAllTask,
+  getTask,
   getBoardWithAllData,
   postList,
   postTask,
+  getAllTask,
 } from "../../services/taskListApi";
 import type { Board, List, Task } from "../../utils/types";
 
 interface BoardState {
   board: Board | null;
   task: Task | null;
+  tasks: Task[] | null;
+
   loading: boolean;
   error: string | null;
 }
@@ -22,6 +25,7 @@ interface BoardState {
 const initialState: BoardState = {
   board: null,
   task: null,
+  tasks: null,
   loading: false,
   error: null,
 };
@@ -94,18 +98,33 @@ const boardSlice = createSlice({
           }
         }
       })
+      .addCase(getTask.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getTask.fulfilled, (state: any, action) => {
+        state.loading = false;
+        state.task = action.payload as Task;
+      })
+      .addCase(getTask.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Không thể tải dữ liệu board";
+      })
       .addCase(getAllTask.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getAllTask.fulfilled, (state: any, action) => {
+      .addCase(getAllTask.fulfilled, (state, action) => {
         state.loading = false;
-        state.task = action.payload as Task;
+        const tasks = action.payload as Task[];
+        state.tasks = tasks;
       })
+
       .addCase(getAllTask.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Không thể tải dữ liệu board";
+        state.error = action.error.message || "Không thể lấy toàn bộ tasks";
       })
+
       .addCase(postTask.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Không thể tạo task mới";
