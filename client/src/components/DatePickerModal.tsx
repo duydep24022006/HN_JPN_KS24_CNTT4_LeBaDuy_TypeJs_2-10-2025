@@ -30,12 +30,11 @@ export function DatePickerModal({
 
   useEffect(() => {
     if (isOpen && currentTask) {
-      // Chỉ set initial value khi mở modal lần đầu
       if (currentTask.created_at) {
         const date = new Date(currentTask.created_at);
         setStartDate(date);
       } else {
-        setStartDate(new Date()); // Mặc định là hôm nay nếu chưa có
+        setStartDate(new Date());
       }
 
       if (currentTask.due_date) {
@@ -45,10 +44,9 @@ export function DatePickerModal({
         setDueDate(new Date());
       }
 
-      setSelectingDate("due"); // Mặc định chọn due date
+      setSelectingDate("due");
     }
-  }, [isOpen]); // Chỉ depend vào isOpen, không depend vào currentTask
-
+  }, [isOpen]);
   const monthNames: string[] = [
     "January",
     "February",
@@ -174,7 +172,6 @@ export function DatePickerModal({
   };
 
   const handleSave = (): void => {
-    const formattedStartDate = startDate ? startDate.toISOString() : null;
     const formattedDueDate = dueDate ? dueDate.toISOString() : null;
 
     setCurrentTask((prev: any) => ({
