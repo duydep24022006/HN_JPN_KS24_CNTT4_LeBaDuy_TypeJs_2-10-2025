@@ -82,7 +82,8 @@ export default function TaskListBoard() {
       const taskWithTags = filteredTasks.find((t) => t.id === task.id);
       return taskWithTags || task;
     });
-  }, [lists, tasks]);
+  }, [lists, tasks, dispatch]);
+
   const handleApplyFilter = (filtered: Task[]) => {
     setFilteredTasks(filtered);
     setIsFilterActive(filtered.length !== allTasks.length);

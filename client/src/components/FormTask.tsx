@@ -9,6 +9,7 @@ import type { AppDispatch } from "../store/store";
 import {
   deleteTask,
   editTask,
+  getAllTask,
   getBoardWithAllData,
 } from "../services/taskListApi";
 import { useParams } from "react-router-dom";
@@ -135,6 +136,7 @@ export default function FormTask({
       .then(() => {
         onClose();
         dispatch(getBoardWithAllData(Number(id)));
+        dispatch(getAllTask());
       })
       .catch((err) => {
         console.error("Lỗi khi cập nhật description:", err);

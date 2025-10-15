@@ -48,6 +48,13 @@
       "username": "duy",
       "password": "Duy1@gmail",
       "created_at": "2025-10-12T14:11:16.269Z"
+    },
+    {
+      "id": 37588740,
+      "email": "duy111@gmail.com",
+      "username": "duy",
+      "password": "Duyle123@",
+      "created_at": "2025-10-15T14:26:33.758Z"
     }
   ],
   "boards": [
@@ -187,12 +194,6 @@
       "title": "ãasasaas",
       "boardId": 102,
       "created_at": "2025-10-12T15:42:24.491Z"
-    },
-    {
-      "id": 47104921,
-      "title": "ádfaSDá",
-      "boardId": 26353635,
-      "created_at": "2025-10-12T15:42:44.710Z"
     },
     {
       "id": 49894794,
@@ -353,33 +354,6 @@
       "tags": []
     },
     {
-      "id": 81579861,
-      "listId": 47104921,
-      "title": "`",
-      "due_date": "2025-10-27T17:00:00.000Z",
-      "description": "<p>ZXas</p>",
-      "status": true,
-      "created_at": "2025-10-10T07:40:18.157Z",
-      "tags": [
-        {
-          "id": 69531619,
-          "taskId": 81579861,
-          "content": "sdfsd",
-          "color": "#FFD93D"
-        }
-      ]
-    },
-    {
-      "id": 1511409,
-      "listId": 47104921,
-      "title": "fasdf",
-      "due_date": "2025-10-22T17:00:00.000Z",
-      "description": "<p>ádasdf</p>",
-      "status": true,
-      "created_at": "2025-10-11T11:09:30.151Z",
-      "tags": []
-    },
-    {
       "id": 38202292,
       "listId": 18346674,
       "title": "zcvzxcv",
@@ -389,16 +363,34 @@
       "created_at": "2025-10-11T11:31:03.820Z",
       "tags": [
         {
-          "id": 1,
-          "title": "Sửa lỗi giao diện",
-          "description": "Kiểm tra bug trên trang dashboard",
-          "listId": 1
+          "id": 13763559,
+          "taskId": 38202292,
+          "content": "ád",
+          "color": "#A7E9E5"
         },
         {
-          "id": 2,
-          "title": "Thêm tính năng đăng nhập",
-          "description": "Sử dụng JWT để xác thực người dùng",
-          "listId": 1
+          "id": 55981446,
+          "taskId": 38202292,
+          "content": "123",
+          "color": "#A7E9E5"
+        },
+        {
+          "id": 9854303,
+          "taskId": 38202292,
+          "content": "sd",
+          "color": "#FFD93D"
+        },
+        {
+          "id": 67705907,
+          "taskId": 38202292,
+          "content": "123",
+          "color": "#FF6B9D"
+        },
+        {
+          "id": 59516456,
+          "taskId": 38202292,
+          "content": "sdf",
+          "color": "#FFD93D"
         }
       ]
     },
@@ -483,16 +475,6 @@
       "tags": []
     },
     {
-      "id": 82037887,
-      "listId": 18346674,
-      "title": "ÁDF",
-      "due_date": "",
-      "description": "",
-      "status": true,
-      "created_at": "2025-10-14T07:25:28.203Z",
-      "tags": []
-    },
-    {
       "id": 13351766,
       "listId": 18346674,
       "title": "ADSF",
@@ -513,16 +495,6 @@
       "tags": []
     },
     {
-      "id": 81624449,
-      "listId": 47104921,
-      "title": "ÁDF",
-      "due_date": "",
-      "description": "",
-      "status": false,
-      "created_at": "2025-10-14T07:25:48.162Z",
-      "tags": []
-    },
-    {
       "id": 57385335,
       "listId": 18346674,
       "title": "ADSF",
@@ -530,6 +502,16 @@
       "description": "",
       "status": false,
       "created_at": "2025-10-14T07:26:35.738Z",
+      "tags": []
+    },
+    {
+      "id": 27493443,
+      "listId": 18346674,
+      "title": ",n/n,",
+      "due_date": "",
+      "description": "",
+      "status": false,
+      "created_at": "2025-10-15T14:37:52.749Z",
       "tags": []
     }
   ]

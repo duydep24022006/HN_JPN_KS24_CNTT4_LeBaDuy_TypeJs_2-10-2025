@@ -15,6 +15,8 @@ export default function FilterDropdown({
   tasks,
   onApplyFilter,
 }: Props) {
+  console.log(tasks);
+
   const [keyword, setKeyword] = useState("");
   const [cardStatus, setCardStatus] = useState({
     complete: false,
@@ -31,9 +33,7 @@ export default function FilterDropdown({
   const [noLabels, setNoLabels] = useState(false);
 
   // useMemo: Tính toán và cache kết quả, chỉ chạy lại khi tasks thay đổi
-  // Mục đích: Lấy danh sách tags UNIQUE (không trùng lặp) từ tất cả tasks
   const allTags = useMemo(() => {
-    // Map: Cấu trúc dữ liệu lưu key-value, đảm bảo key unique
     const tagMap = new Map<number, Tags>();
 
     // Duyệt qua từng task
@@ -155,7 +155,6 @@ export default function FilterDropdown({
         </div>
 
         <div className="px-3 py-4 max-h-[600px] overflow-y-auto">
-          {/* KEYWORD FILTER */}
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1.5">
               Keyword
@@ -170,7 +169,6 @@ export default function FilterDropdown({
             <p className="text-xs text-gray-500 mt-1">Search cards</p>
           </div>
 
-          {/* CARD STATUS FILTER */}
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-2">
               Card status
