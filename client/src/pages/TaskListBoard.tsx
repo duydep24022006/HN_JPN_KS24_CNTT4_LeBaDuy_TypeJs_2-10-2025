@@ -60,9 +60,8 @@ export default function TaskListBoard() {
   const boardState = useSelector((state: RootState) => state.listSlice);
 
   const board = boardState.board;
-  const tasks: Task[] | [] = boardState.tasks;
-
   const lists: List[] = board?.lists || [];
+  const tasks: Task[] | null = boardState.tasks;
 
   const [error, setError] = useState<ErrorState>({
     listTitle: "",
@@ -71,14 +70,23 @@ export default function TaskListBoard() {
   });
 
   const allTasks = useMemo(() => {
-    return lists.flatMap((list) => list.tasks || []);
-  }, [lists]);
-
+    const tasksFromLists = lists.flatMap((list) => list.tasks || []);
+    if (!tasks || tasks.length === 0) {
+      return tasksFromLists;
+    }
+    const validTaskIds = new Set(tasksFromLists.map((t) => t.id));
+    const filteredTasks = tasks.filter(
+      (task) => task.id && validTaskIds.has(task.id)
+    );
+    return tasksFromLists.map((task) => {
+      const taskWithTags = filteredTasks.find((t) => t.id === task.id);
+      return taskWithTags || task;
+    });
+  }, [lists, tasks]);
   const handleApplyFilter = (filtered: Task[]) => {
     setFilteredTasks(filtered);
     setIsFilterActive(filtered.length !== allTasks.length);
   };
-
   const resetAllInputs = () => {
     setEditingListId(null);
     setAddingCardToList(null);
@@ -139,7 +147,7 @@ export default function TaskListBoard() {
 
   const newListSubmit = () => {
     if (!newListTitle.trim()) {
-      setError((prev) => ({ ...prev, listTitle: "Không được bỏ trống" }));
+      setError((prev) => ({ ...prev, listTitle: "Cannot be empty" }));
       return;
     }
 
@@ -159,7 +167,7 @@ export default function TaskListBoard() {
 
   const newTaskSubmit = (id: number) => {
     if (!newTaskTitle.trim()) {
-      setError((prev) => ({ ...prev, taskTitle: "Không được bỏ trống" }));
+      setError((prev) => ({ ...prev, taskTitle: "Cannot be empty" }));
       return;
     }
 
@@ -183,7 +191,7 @@ export default function TaskListBoard() {
 
   const editListSubmit = (list: List) => {
     if (!editListTitle.trim()) {
-      setError((prev) => ({ ...prev, editTitle: "Không được bỏ trống" }));
+      setError((prev) => ({ ...prev, editTitle: "Cannot be empty" }));
       return;
     }
 

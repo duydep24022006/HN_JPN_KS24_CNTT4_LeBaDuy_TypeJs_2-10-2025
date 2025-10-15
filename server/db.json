@@ -276,6 +276,12 @@
           "taskId": 301,
           "content": "sdfgs",
           "color": "#FFD93D"
+        },
+        {
+          "id": 22883778,
+          "taskId": 301,
+          "content": "sd",
+          "color": "#FFD93D"
         }
       ]
     },
@@ -307,7 +313,14 @@
       "description": "<p>ds</p>",
       "status": false,
       "created_at": "2025-10-09T17:05:22.833Z",
-      "tags": []
+      "tags": [
+        {
+          "id": 7232850,
+          "taskId": 28331757,
+          "content": "s",
+          "color": "#FFD93D"
+        }
+      ]
     },
     {
       "id": 72946542,

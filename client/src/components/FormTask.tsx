@@ -75,7 +75,7 @@ export default function FormTask({
     if (!trimmedTitle) {
       setError((prev) => ({
         ...prev,
-        title: "Không được bỏ trống",
+        title: "Cannot be empty",
       }));
       return;
     }

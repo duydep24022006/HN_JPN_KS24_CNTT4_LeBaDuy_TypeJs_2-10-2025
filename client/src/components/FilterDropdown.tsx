@@ -1,5 +1,5 @@
 import { X, Clock, CalendarDays, Tag } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import type { Task, Tags } from "../utils/types";
 
 type Props = {
@@ -26,78 +26,115 @@ export default function FilterDropdown({
     nextDay: false,
   });
   const [selectedLabels, setSelectedLabels] = useState<number[]>([]);
+  const [selectedLabelsContent, setSelectedLabelsContent] = useState<string>();
+
   const [noLabels, setNoLabels] = useState(false);
 
+  // useMemo: Tính toán và cache kết quả, chỉ chạy lại khi tasks thay đổi
+  // Mục đích: Lấy danh sách tags UNIQUE (không trùng lặp) từ tất cả tasks
+  const allTags = useMemo(() => {
+    // Map: Cấu trúc dữ liệu lưu key-value, đảm bảo key unique
+    const tagMap = new Map<number, Tags>();
+
+    // Duyệt qua từng task
+    tasks.forEach((task) => {
+      // task.tags?: Nếu task có tags thì duyệt, không có thì bỏ qua (optional chaining)
+      task.tags?.forEach((tag) => {
+        // Chỉ thêm tag nếu:
+        // 1. tag có id
+        // 2. id này chưa tồn tại trong Map (!tagMap.has(tag.id))
+        if (tag.id && !tagMap.has(tag.id)) {
+          tagMap.set(tag.id, tag); // Lưu tag vào Map với key = tag.id
+        }
+      });
+    });
+
+    // Array.from: Chuyển Map thành Array
+    // tagMap.values(): Lấy tất cả values (không lấy keys)
+    return Array.from(tagMap.values());
+  }, [tasks]); // Dependency: chỉ chạy lại khi tasks thay đổi
+
+  // Toggle (bật/tắt) một label trong danh sách đã chọn
   const handleLabelToggle = (labelId: number) => {
-    setSelectedLabels((prev) =>
-      prev.includes(labelId)
-        ? prev.filter((id) => id !== labelId)
-        : [...prev, labelId]
+    setSelectedLabels(
+      (prev) =>
+        // prev.includes(labelId): Kiểm tra label đã được chọn chưa
+        prev.includes(labelId)
+          ? prev.filter((id) => id !== labelId) // Đã chọn -> Bỏ chọn (loại khỏi mảng)
+          : [...prev, labelId] // Chưa chọn -> Thêm vào mảng
     );
   };
 
+  // Kiểm tra task có quá hạn không
   const isOverdue = (dueDate: string | undefined) => {
     if (!dueDate) return false;
-    return new Date(dueDate) < new Date();
+    return new Date(dueDate) < new Date(); // So sánh ngày: task < hôm nay = quá hạn
   };
 
+  // Kiểm tra task có hạn sau hôm nay không
   const isDueNextDay = (dueDate: string | undefined) => {
     if (!dueDate) return false;
     const taskDate = new Date(dueDate);
     const today = new Date();
-    today.setHours(23, 59, 59, 999);
-    return taskDate > today;
+    today.setHours(23, 59, 59, 999); // Set thời gian cuối ngày hôm nay
+    return taskDate > today; // task > hôm nay = còn hạn
   };
 
+  // HÀM CHÍNH: Áp dụng tất cả bộ lọc
   const applyFilters = () => {
-    let filtered = [...tasks];
+    let filtered = [...tasks]; // Copy mảng tasks (spread operator)
 
+    // BỘ LỌC 1: Keyword (tìm kiếm theo title)
     if (keyword.trim()) {
+      // trim(): Xóa khoảng trắng đầu cuối
       filtered = filtered.filter((task) =>
         task.title.toLowerCase().includes(keyword.toLowerCase())
       );
     }
 
+    // BỘ LỌC 2: Card status (complete/incomplete)
     if (cardStatus.complete || cardStatus.incomplete) {
       filtered = filtered.filter((task) => {
+        // Nếu chọn cả 2 -> hiển thị tất cả
         if (cardStatus.complete && cardStatus.incomplete) return true;
+        // Chỉ chọn complete -> chỉ hiển thị task.status = true
         if (cardStatus.complete) return task.status === true;
+        // Chỉ chọn incomplete -> chỉ hiển thị task.status = false
         if (cardStatus.incomplete) return task.status === false;
         return true;
       });
     }
 
+    // BỘ LỌC 3: Due date (no dates/overdue/next day)
     if (dueDate.noDates || dueDate.overdue || dueDate.nextDay) {
       filtered = filtered.filter((task) => {
-        if (dueDate.noDates && !task.due_date) return true;
-        if (dueDate.overdue && isOverdue(task.due_date)) return true;
-        if (dueDate.nextDay && isDueNextDay(task.due_date)) return true;
-        return false;
+        // Hiển thị task nếu thỏa MỘT trong các điều kiện (OR logic)
+        if (dueDate.noDates && !task.due_date) return true; // Không có ngày
+        if (dueDate.overdue && isOverdue(task.due_date)) return true; // Quá hạn
+        if (dueDate.nextDay && isDueNextDay(task.due_date)) return true; // Còn hạn
+        return false; // Không thỏa điều kiện nào -> loại bỏ
       });
     }
 
+    // BỘ LỌC 4: Labels/Tags
     if (noLabels) {
+      // Chọn "No labels" -> chỉ hiển thị tasks không có tags
       filtered = filtered.filter(
         (task) => !task.tags || task.tags.length === 0
       );
     } else if (selectedLabels.length > 0) {
+      // Có chọn labels -> hiển thị tasks có ÍT NHẤT MỘT label được chọn
       filtered = filtered.filter((task) =>
-        task.tags?.some((tag) => selectedLabels.includes(Number(tag.id)))
+        // some(): Trả về true nếu ít nhất 1 phần tử thỏa điều kiện
+        task.tags?.some((tag) => tag.id && selectedLabels.includes(tag.id))
       );
     }
 
+    // Gọi callback trả kết quả về component cha
     onApplyFilter(filtered);
   };
 
-  const handleClearFilters = () => {
-    setKeyword("");
-    setCardStatus({ complete: false, incomplete: false });
-    setDueDate({ noDates: false, overdue: false, nextDay: false });
-    setSelectedLabels([]);
-    setNoLabels(false);
-    onApplyFilter(tasks);
-  };
-
+  // useEffect: Tự động chạy lại applyFilters khi các filter thay đổi
   useEffect(() => {
     applyFilters();
   }, [keyword, cardStatus, dueDate, selectedLabels, noLabels]);
@@ -118,6 +155,7 @@ export default function FilterDropdown({
         </div>
 
         <div className="px-3 py-4 max-h-[600px] overflow-y-auto">
+          {/* KEYWORD FILTER */}
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1.5">
               Keyword
@@ -132,6 +170,7 @@ export default function FilterDropdown({
             <p className="text-xs text-gray-500 mt-1">Search cards</p>
           </div>
 
+          {/* CARD STATUS FILTER */}
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-2">
               Card status
@@ -170,7 +209,7 @@ export default function FilterDropdown({
             </div>
           </div>
 
-          {/* Due date */}
+          {/* DUE DATE FILTER */}
           <div className="mb-2">
             <label className="block text-xs font-medium text-gray-700 mb-2">
               Due date
@@ -204,6 +243,7 @@ export default function FilterDropdown({
               </div>
               <label className="text-sm text-gray-700">Overdue</label>
             </div>
+
             <div className="flex items-center gap-2.5 cursor-pointer h-7">
               <input
                 type="checkbox"
@@ -222,74 +262,89 @@ export default function FilterDropdown({
             </div>
           </div>
 
+          {/* LABELS FILTER */}
           <div>
-            <label className="block text-xs font-medium text-gray-700  mb-2">
+            <label className="block text-xs font-medium text-gray-700 mb-2">
               Labels
             </label>
             <div className="space-y-2.5">
-              <div className="flex  items-center ">
+              {/* No Labels Option */}
+              <div className="flex items-center">
                 <div className="flex flex-col gap-2">
-                  <div className="flex gap-3 ">
+                  <div className="flex gap-3">
                     <input
                       type="checkbox"
+                      checked={noLabels}
+                      onChange={(e) => setNoLabels(e.target.checked)}
                       className="w-4 h-4 border border-gray-400 rounded cursor-pointer accent-blue-600"
                     />
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center">
                         <Tag size={16} className="rotate-270" />
                       </div>
-                      <label className="flex items-center justify-center flex-row">
-                        No labels
-                      </label>
+                      <label className="text-sm text-gray-700">No labels</label>
                     </div>
                   </div>
-                  <div className="flex gap-3 items-center">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 border border-gray-400 rounded cursor-pointer accent-blue-600"
-                    />
-                    <label>
-                      <div className="flex-1 w-[330px] h-8 bg-emerald-500 rounded"></div>
-                    </label>
-                  </div>
-                  <div className="flex gap-3 items-center">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 border border-gray-400 rounded cursor-pointer accent-blue-600"
-                    />
-                    <label>
-                      <div className="flex-1 w-[330px]  h-8 bg-yellow-400 rounded"></div>
-                    </label>
-                  </div>
-                  <div className="flex gap-3 items-center">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 border border-gray-400 rounded cursor-pointer accent-blue-600"
-                    />
-                    <label>
-                      <div className="flex-1 w-[330px]  h-8 bg-orange-400 rounded"></div>
-                    </label>
-                  </div>
+
+                  {/* Danh sách các tags hiện có */}
+                  {allTags.map((tag) => (
+                    <div key={tag.id} className="flex gap-3 items-center">
+                      <input
+                        type="checkbox"
+                        checked={
+                          tag.id ? selectedLabels.includes(tag.id) : false
+                        }
+                        onChange={() => tag.id && handleLabelToggle(tag.id)}
+                        className="w-4 h-4 border border-gray-400 rounded cursor-pointer accent-blue-600"
+                      />
+                      <label className="cursor-pointer flex-1">
+                        <div
+                          className="w-[300px] h-8 rounded flex items-center px-2"
+                          style={{ backgroundColor: tag.color || "#10b981" }}
+                        >
+                          <span className="text-sm font-medium text-white">
+                            {tag.content || "Untitled"}
+                          </span>
+                        </div>
+                      </label>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              <div className="relative flex justify-center items-center">
-                <input
-                  type="checkbox"
-                  className="w-4 h-4 border border-gray-400 rounded cursor-pointer accent-blue-600"
-                />
-                <select className="w-full px-2.5 py-2 text-sm text-gray-600 border-0 border-blue-500 rounded appearance-none cursor-pointer focus:outline-none bg-white">
-                  <option>Select labels</option>
-                </select>
-                <svg
-                  className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-600"
-                  width="12"
-                  height="12"
-                  viewBox="0 0 12 12"
-                >
-                  <path fill="currentColor" d="M6 8L2 4h8z" />
-                </svg>
-              </div>
+              {allTags.length > 0 && (
+                <div className="relative">
+                  <select
+                    onChange={(e) => {
+                      const selected = String(e.target.value);
+                      const [id, content] = selected.split(",");
+                      if (id && !selectedLabels.includes(Number(id))) {
+                        setSelectedLabels([...selectedLabels, Number(id)]);
+                      }
+                      setSelectedLabelsContent(content);
+                      e.target.value = "";
+                    }}
+                    className="w-full px-2.5 py-2 text-sm text-gray-600 border border-gray-300 rounded appearance-none cursor-pointer focus:outline-none bg-white"
+                  >
+                    <option value="">
+                      {selectedLabelsContent || "no select"}
+                    </option>
+                    {allTags.map((tag) => (
+                      <option key={tag.id} value={`${tag.id},${tag.content}`}>
+                        {tag.content || "Untitled"}
+                      </option>
+                    ))}
+                  </select>
+                  <svg
+                    className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-600"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                  >
+                    <path fill="currentColor" d="M6 8L2 4h8z" />
+                  </svg>
+                </div>
+              )}
             </div>
           </div>
         </div>
