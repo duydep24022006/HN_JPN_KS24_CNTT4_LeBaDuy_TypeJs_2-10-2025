@@ -32,109 +32,79 @@ export default function FilterDropdown({
 
   const [noLabels, setNoLabels] = useState(false);
 
-  // useMemo: Tính toán và cache kết quả, chỉ chạy lại khi tasks thay đổi
   const allTags = useMemo(() => {
     const tagMap = new Map<number, Tags>();
 
-    // Duyệt qua từng task
     tasks.forEach((task) => {
-      // task.tags?: Nếu task có tags thì duyệt, không có thì bỏ qua (optional chaining)
       task.tags?.forEach((tag) => {
-        // Chỉ thêm tag nếu:
-        // 1. tag có id
-        // 2. id này chưa tồn tại trong Map (!tagMap.has(tag.id))
         if (tag.id && !tagMap.has(tag.id)) {
-          tagMap.set(tag.id, tag); // Lưu tag vào Map với key = tag.id
+          tagMap.set(tag.id, tag);
         }
       });
     });
 
-    // Array.from: Chuyển Map thành Array
-    // tagMap.values(): Lấy tất cả values (không lấy keys)
     return Array.from(tagMap.values());
-  }, [tasks]); // Dependency: chỉ chạy lại khi tasks thay đổi
+  }, [tasks]);
 
-  // Toggle (bật/tắt) một label trong danh sách đã chọn
   const handleLabelToggle = (labelId: number) => {
-    setSelectedLabels(
-      (prev) =>
-        // prev.includes(labelId): Kiểm tra label đã được chọn chưa
-        prev.includes(labelId)
-          ? prev.filter((id) => id !== labelId) // Đã chọn -> Bỏ chọn (loại khỏi mảng)
-          : [...prev, labelId] // Chưa chọn -> Thêm vào mảng
+    setSelectedLabels((prev) =>
+      prev.includes(labelId)
+        ? prev.filter((id) => id !== labelId)
+        : [...prev, labelId]
     );
   };
 
-  // Kiểm tra task có quá hạn không
   const isOverdue = (dueDate: string | undefined) => {
     if (!dueDate) return false;
-    return new Date(dueDate) < new Date(); // So sánh ngày: task < hôm nay = quá hạn
+    return new Date(dueDate) < new Date();
   };
 
-  // Kiểm tra task có hạn sau hôm nay không
   const isDueNextDay = (dueDate: string | undefined) => {
     if (!dueDate) return false;
     const taskDate = new Date(dueDate);
     const today = new Date();
-    today.setHours(23, 59, 59, 999); // Set thời gian cuối ngày hôm nay
-    return taskDate > today; // task > hôm nay = còn hạn
+    today.setHours(23, 59, 59, 999);
+    return taskDate > today;
   };
 
-  // HÀM CHÍNH: Áp dụng tất cả bộ lọc
   const applyFilters = () => {
-    let filtered = [...tasks]; // Copy mảng tasks (spread operator)
+    let filtered = [...tasks];
 
-    // BỘ LỌC 1: Keyword (tìm kiếm theo title)
     if (keyword.trim()) {
-      // trim(): Xóa khoảng trắng đầu cuối
       filtered = filtered.filter((task) =>
         task.title.toLowerCase().includes(keyword.toLowerCase())
       );
     }
 
-    // BỘ LỌC 2: Card status (complete/incomplete)
     if (cardStatus.complete || cardStatus.incomplete) {
       filtered = filtered.filter((task) => {
-        // Nếu chọn cả 2 -> hiển thị tất cả
         if (cardStatus.complete && cardStatus.incomplete) return true;
-        // Chỉ chọn complete -> chỉ hiển thị task.status = true
         if (cardStatus.complete) return task.status === true;
-        // Chỉ chọn incomplete -> chỉ hiển thị task.status = false
         if (cardStatus.incomplete) return task.status === false;
         return true;
       });
     }
 
-    // BỘ LỌC 3: Due date (no dates/overdue/next day)
     if (dueDate.noDates || dueDate.overdue || dueDate.nextDay) {
       filtered = filtered.filter((task) => {
-        // Hiển thị task nếu thỏa MỘT trong các điều kiện (OR logic)
-        if (dueDate.noDates && !task.due_date) return true; // Không có ngày
-        if (dueDate.overdue && isOverdue(task.due_date)) return true; // Quá hạn
-        if (dueDate.nextDay && isDueNextDay(task.due_date)) return true; // Còn hạn
-        return false; // Không thỏa điều kiện nào -> loại bỏ
+        if (dueDate.noDates && !task.due_date) return true;
+        if (dueDate.overdue && isOverdue(task.due_date)) return true;
+        if (dueDate.nextDay && isDueNextDay(task.due_date)) return true;
+        return false;
       });
     }
 
-    // BỘ LỌC 4: Labels/Tags
     if (noLabels) {
-      // Chọn "No labels" -> chỉ hiển thị tasks không có tags
       filtered = filtered.filter(
         (task) => !task.tags || task.tags.length === 0
       );
     } else if (selectedLabels.length > 0) {
-      // Có chọn labels -> hiển thị tasks có ÍT NHẤT MỘT label được chọn
       filtered = filtered.filter((task) =>
-        // some(): Trả về true nếu ít nhất 1 phần tử thỏa điều kiện
         task.tags?.some((tag) => tag.id && selectedLabels.includes(tag.id))
       );
     }
-
-    // Gọi callback trả kết quả về component cha
     onApplyFilter(filtered);
   };
-
-  // useEffect: Tự động chạy lại applyFilters khi các filter thay đổi
   useEffect(() => {
     applyFilters();
   }, [keyword, cardStatus, dueDate, selectedLabels, noLabels]);
@@ -168,7 +138,6 @@ export default function FilterDropdown({
             />
             <p className="text-xs text-gray-500 mt-1">Search cards</p>
           </div>
-
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-2">
               Card status
@@ -207,7 +176,6 @@ export default function FilterDropdown({
             </div>
           </div>
 
-          {/* DUE DATE FILTER */}
           <div className="mb-2">
             <label className="block text-xs font-medium text-gray-700 mb-2">
               Due date
@@ -260,13 +228,11 @@ export default function FilterDropdown({
             </div>
           </div>
 
-          {/* LABELS FILTER */}
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-2">
               Labels
             </label>
             <div className="space-y-2.5">
-              {/* No Labels Option */}
               <div className="flex items-center">
                 <div className="flex flex-col gap-2">
                   <div className="flex gap-3">
@@ -284,7 +250,6 @@ export default function FilterDropdown({
                     </div>
                   </div>
 
-                  {/* Danh sách các tags hiện có */}
                   {allTags.map((tag) => (
                     <div key={tag.id} className="flex gap-3 items-center">
                       <input

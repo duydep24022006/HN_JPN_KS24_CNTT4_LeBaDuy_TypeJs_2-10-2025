@@ -55,6 +55,16 @@
       "username": "duy",
       "password": "Duyle123@",
       "created_at": "2025-10-15T14:26:33.758Z"
+<<<<<<< HEAD
+=======
+    },
+    {
+      "id": 22198190,
+      "email": "123@gmail1.com",
+      "username": "duy",
+      "password": "D123@gmail1",
+      "created_at": "2025-10-16T08:02:32.219Z"
+>>>>>>> 27464b8 (moi)
     }
   ],
   "boards": [
@@ -114,14 +124,21 @@
       "created_at": "2025-10-09T04:59:49.536Z"
     },
     {
+<<<<<<< HEAD
       "id": 8037185,
       "title": "Spring",
       "backdrop": "https://res.cloudinary.com/dytn1lbpl/image/upload/v1759734794/image_9_f9nmwq.jpg",
+=======
+      "id": 26353635,
+      "title": "12",
+      "backdrop": "https://res.cloudinary.com/dytn1lbpl/image/upload/v1759734758/image_7_rmat4n.jpg",
+>>>>>>> 27464b8 (moi)
       "userId": 1,
       "type": "image",
       "is_starred": true,
       "is_close": false,
       "description": "",
+<<<<<<< HEAD
       "created_at": "2025-10-10T06:13:30.803Z"
     },
     {
@@ -133,6 +150,8 @@
       "is_starred": false,
       "is_close": false,
       "description": "",
+=======
+>>>>>>> 27464b8 (moi)
       "created_at": "2025-10-10T07:13:32.635Z"
     },
     {
@@ -145,6 +164,64 @@
       "is_close": false,
       "description": "",
       "created_at": "2025-10-12T15:44:01.750Z"
+<<<<<<< HEAD
+=======
+    },
+    {
+      "id": 4871320,
+      "title": "k",
+      "backdrop": "https://res.cloudinary.com/dytn1lbpl/image/upload/v1759734763/image_8_aouypf.jpg",
+      "userId": 1,
+      "type": "image",
+      "is_starred": false,
+      "is_close": false,
+      "description": "",
+      "created_at": "2025-10-16T04:05:20.487Z"
+    },
+    {
+      "id": 82217772,
+      "title": "m",
+      "backdrop": "linear-gradient(135deg, #FF00EA, #FA0C00)",
+      "userId": 1,
+      "type": "color",
+      "is_starred": false,
+      "is_close": true,
+      "description": "",
+      "created_at": "2025-10-16T04:05:28.221Z"
+    },
+    {
+      "id": 72679337,
+      "title": " ádvds",
+      "backdrop": "https://res.cloudinary.com/dytn1lbpl/image/upload/v1759734758/image_7_rmat4n.jpg",
+      "userId": 1,
+      "type": "image",
+      "is_starred": false,
+      "is_close": false,
+      "description": "",
+      "created_at": "2025-10-17T08:28:17.267Z"
+    },
+    {
+      "id": 52657418,
+      "title": "vbv",
+      "backdrop": "linear-gradient(135deg, #FF00EA, #FA0C00)",
+      "userId": 1,
+      "type": "color",
+      "is_starred": false,
+      "is_close": false,
+      "description": "",
+      "created_at": "2025-10-17T08:28:25.265Z"
+    },
+    {
+      "id": 42926641,
+      "title": "sad",
+      "backdrop": "https://res.cloudinary.com/dytn1lbpl/image/upload/v1759734763/image_8_aouypf.jpg",
+      "userId": 1,
+      "type": "image",
+      "is_starred": false,
+      "is_close": false,
+      "description": "",
+      "created_at": "2025-10-17T08:28:44.292Z"
+>>>>>>> 27464b8 (moi)
     }
   ],
   "lists": [
@@ -177,7 +254,11 @@
     },
     {
       "id": 18346674,
+<<<<<<< HEAD
       "title": "ÁDAS",
+=======
+      "title": "ÁDASty",
+>>>>>>> 27464b8 (moi)
       "boardId": 26353635,
       "created_at": "2025-10-11T05:54:41.834Z",
       "tasks": []
@@ -244,10 +325,23 @@
       "created_at": "2025-10-13T07:13:40.950Z"
     },
     {
+<<<<<<< HEAD
       "id": 28815514,
       "title": "hjk",
       "boardId": 8037185,
       "created_at": "2025-10-13T07:14:52.881Z"
+=======
+      "id": 85801603,
+      "title": "ads",
+      "boardId": 4871320,
+      "created_at": "2025-10-16T08:08:38.580Z"
+    },
+    {
+      "id": 1406710,
+      "title": "dsfs",
+      "boardId": 4871320,
+      "created_at": "2025-10-16T08:16:10.140Z"
+>>>>>>> 27464b8 (moi)
     }
   ],
   "tasks": [
@@ -354,6 +448,7 @@
       "tags": []
     },
     {
+<<<<<<< HEAD
       "id": 38202292,
       "listId": 18346674,
       "title": "zcvzxcv",
@@ -395,6 +490,8 @@
       ]
     },
     {
+=======
+>>>>>>> 27464b8 (moi)
       "id": 17494766,
       "listId": 21459543,
       "title": "ádf",
@@ -475,6 +572,7 @@
       "tags": []
     },
     {
+<<<<<<< HEAD
       "id": 13351766,
       "listId": 18346674,
       "title": "ADSF",
@@ -503,6 +601,23 @@
       "status": false,
       "created_at": "2025-10-14T07:26:35.738Z",
       "tags": []
+=======
+      "id": 57385335,
+      "listId": 18346674,
+      "title": "ADSF",
+      "due_date": "2025-10-28T17:00:00.000Z",
+      "description": "",
+      "status": true,
+      "created_at": "2025-10-14T07:26:35.738Z",
+      "tags": [
+        {
+          "id": 69475507,
+          "taskId": 57385335,
+          "content": "j",
+          "color": "#FFD93D"
+        }
+      ]
+>>>>>>> 27464b8 (moi)
     },
     {
       "id": 27493443,
@@ -513,6 +628,36 @@
       "status": false,
       "created_at": "2025-10-15T14:37:52.749Z",
       "tags": []
+<<<<<<< HEAD
+=======
+    },
+    {
+      "id": 60816933,
+      "listId": 1406710,
+      "title": "ádssd",
+      "due_date": "",
+      "description": "",
+      "status": true,
+      "created_at": "2025-10-16T08:08:46.081Z",
+      "tags": [
+        {
+          "id": 55777188,
+          "taskId": 60816933,
+          "content": "ád",
+          "color": "#FF6B9D"
+        }
+      ]
+    },
+    {
+      "id": 25217077,
+      "listId": 85801603,
+      "title": "ád",
+      "due_date": "",
+      "description": "",
+      "status": false,
+      "created_at": "2025-10-16T08:08:52.521Z",
+      "tags": []
+>>>>>>> 27464b8 (moi)
     }
   ]
 }
