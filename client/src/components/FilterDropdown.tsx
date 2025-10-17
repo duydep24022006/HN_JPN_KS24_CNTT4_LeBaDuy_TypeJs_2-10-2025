@@ -110,6 +110,7 @@ export default function FilterDropdown({
   }, [keyword, cardStatus, dueDate, selectedLabels, noLabels]);
 
   if (!isFilter) return <></>;
+  if (!isFilter) return <></>;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
